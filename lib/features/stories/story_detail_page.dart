@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
-import '../sutra/widgets/reading_toolbar.dart' show isNightModeProvider;
+import '../../core/theme/theme_provider.dart' show isNightModeProvider;
 import 'story_controller.dart';
 
 class StoryDetailPage extends ConsumerWidget {
