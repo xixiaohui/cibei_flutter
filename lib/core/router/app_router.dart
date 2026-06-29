@@ -20,18 +20,9 @@ import '../../features/search/search_page.dart';
 import '../../features/ai/ai_chat_page.dart';
 import '../../features/notes/notes_page.dart';
 import '../../features/notes/note_detail_page.dart';
-
-// Placeholder pages — replaced with real pages in later tasks
-class _PlaceholderPage extends StatelessWidget {
-  final String title;
-  const _PlaceholderPage(this.title);
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Center(child: Text('$title — Coming Soon')),
-      );
-}
+import '../../features/path/path_list_page.dart';
+import '../../features/path/path_detail_page.dart';
+import '../../features/timeline/timeline_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -43,7 +34,6 @@ final appRouter = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        // ScaffoldWithNavShell will be created in Task 7 (Core Widgets)
         return _ScaffoldWithNavShell(
             currentLocation: state.uri.toString(), child: child);
       },
@@ -176,15 +166,24 @@ final appRouter = GoRouter(
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
+      path: '/paths',
+      name: RouteNames.pathList,
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: PathListPage(),
+      ),
+    ),
+    GoRoute(
       path: '/paths/:slug',
       name: RouteNames.pathDetail,
       builder: (context, state) =>
-          _PlaceholderPage('Path: ${state.pathParameters['slug']}'),
+          PathDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/timeline',
       name: RouteNames.timeline,
-      builder: (context, state) => const _PlaceholderPage('Timeline'),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: TimelinePage(),
+      ),
     ),
   ],
 );

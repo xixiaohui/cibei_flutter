@@ -11,6 +11,8 @@ class HiveBoxes {
   static const String favoritesCache = 'favorites_cache';
   static const String chatHistory = 'chat_history';
   static const String notes = 'notes';
+  static const String pathCache = 'path_cache';
+  static const String timelineCache = 'timeline_cache';
 
   static const List<String> all = [
     homeCache,
@@ -25,5 +27,7 @@ class HiveBoxes {
     favoritesCache,
     chatHistory,
     notes,
+    pathCache,
+    timelineCache,
   ];
 }

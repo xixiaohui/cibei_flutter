@@ -19,6 +19,7 @@ class RouteNames {
   static const String noteDetail = 'noteDetail';
   static const String settings = 'settings';
   static const String login = 'login';
+  static const String pathList = 'pathList';
   static const String pathDetail = 'pathDetail';
   static const String timeline = 'timeline';
 }
