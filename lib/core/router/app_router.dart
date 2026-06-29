@@ -11,6 +11,9 @@ import '../../features/dictionary/dictionary_detail_page.dart';
 import '../../features/dictionary/dictionary_list_page.dart';
 import '../../features/encyclopedia/encyclopedia_detail_page.dart';
 import '../../features/encyclopedia/encyclopedia_list_page.dart';
+import '../../features/profile/login_page.dart';
+import '../../features/profile/profile_page.dart';
+import '../../features/profile/settings_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -71,7 +74,7 @@ final appRouter = GoRouter(
           path: '/profile',
           name: RouteNames.profile,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: _PlaceholderPage('Profile'),
+            child: ProfilePage(),
           ),
         ),
       ],
@@ -139,12 +142,12 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/settings',
       name: RouteNames.settings,
-      builder: (context, state) => const _PlaceholderPage('Settings'),
+      builder: (context, state) => const SettingsPage(),
     ),
     GoRoute(
       path: '/login',
       name: RouteNames.login,
-      builder: (context, state) => const _PlaceholderPage('Login'),
+      builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
       path: '/paths/:slug',
