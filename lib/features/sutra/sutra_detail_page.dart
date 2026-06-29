@@ -34,15 +34,9 @@ class SutraDetailPage extends ConsumerWidget {
                       : Icons.favorite_border),
                   color: status.valueOrNull == true ? Colors.red : null,
                   onPressed: () async {
-                    await ref
-                        .read(favoritesRepositoryProvider)
-                        .toggleFavorite(
-                            type: 'sutra',
-                            slug: slug,
-                            title: s.title,
-                            subtitle: s.category);
-                    ref.invalidate(
-                        favoriteStatusProvider((type: 'sutra', slug: slug)));
+                    await ref.read(favoritesProvider.notifier).toggle(
+                        'sutra', slug, s.title,
+                        subtitle: s.category);
                   },
                 );
               },

@@ -38,8 +38,21 @@ class FavoritesPage extends ConsumerWidget {
                   color: Theme.of(context).colorScheme.error,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                onDismissed: (_) =>
-                    ref.read(favoritesProvider.notifier).remove(fav.id),
+                confirmDismiss: (_) async {
+                  try {
+                    await ref
+                        .read(favoritesProvider.notifier)
+                        .remove(fav.id);
+                    return true;
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('删除失败：$e')),
+                      );
+                    }
+                    return false;
+                  }
+                },
                 child: ListTile(
                   leading: Icon(_typeIcon(fav.type)),
                   title: Text(fav.title),

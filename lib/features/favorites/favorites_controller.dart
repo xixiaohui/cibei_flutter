@@ -20,6 +20,7 @@ class FavoritesController extends AsyncNotifier<List<Favorite>> {
     await ref.read(favoritesRepositoryProvider).toggleFavorite(
         type: type, slug: slug, title: title, subtitle: subtitle);
     ref.invalidateSelf();
+    ref.invalidate(favoriteStatusProvider((type: type, slug: slug)));
   }
 
   Future<void> remove(String id) async {
