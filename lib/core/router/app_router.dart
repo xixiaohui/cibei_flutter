@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'route_names.dart';
 import '../../features/home/home_page.dart';
+import '../../features/sutra/sutra_detail_page.dart';
+import '../../features/sutra/sutra_reading_page.dart';
+import '../../features/sutra/sutra_list_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -41,7 +44,7 @@ final appRouter = GoRouter(
           path: '/library',
           name: RouteNames.library,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: _PlaceholderPage('Library'),
+            child: SutraListPage(),
           ),
         ),
         GoRoute(
@@ -72,13 +75,13 @@ final appRouter = GoRouter(
       path: '/sutra/:slug',
       name: RouteNames.sutraDetail,
       builder: (context, state) =>
-          _PlaceholderPage('Sutra: ${state.pathParameters['slug']}'),
+          SutraDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/sutra/:slug/read',
       name: RouteNames.sutraRead,
       builder: (context, state) =>
-          _PlaceholderPage('Reading: ${state.pathParameters['slug']}'),
+          SutraReadingPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/glossary/:slug',
