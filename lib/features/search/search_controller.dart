@@ -9,31 +9,19 @@ final searchRepositoryProvider = Provider(
 );
 
 final searchResultsProvider =
-    StateNotifierProvider.family<SearchNotifier, AsyncValue<SearchResponse>, String>(
-  (ref, query) {
-    return SearchNotifier(ref, query);
-  },
+    AsyncNotifierProvider.family<SearchNotifier, SearchResponse, String>(
+  () => SearchNotifier(),
 );
 
-class SearchNotifier extends StateNotifier<AsyncValue<SearchResponse>> {
-  final Ref _ref;
-  final String _query;
-
-  SearchNotifier(this._ref, this._query) : super(const AsyncLoading()) {
-    _search();
-  }
-
-  Future<void> _search() async {
-    if (_query.isEmpty) {
-      state = const AsyncData(SearchResponse(results: [], total: 0));
-      return;
+class SearchNotifier extends FamilyAsyncNotifier<SearchResponse, String> {
+  @override
+  Future<SearchResponse> build(String query) async {
+    if (query.isEmpty) {
+      return const SearchResponse(results: [], total: 0);
     }
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final repo = _ref.read(searchRepositoryProvider);
-      await repo.saveRecentSearch(_query);
-      return repo.search(_query);
-    });
+    final repo = ref.read(searchRepositoryProvider);
+    await repo.saveRecentSearch(query);
+    return repo.search(query);
   }
 }
 
