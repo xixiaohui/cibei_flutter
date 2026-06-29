@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../favorites/favorites_controller.dart';
 import 'sutra_controller.dart';
 
 class SutraDetailPage extends ConsumerWidget {
@@ -20,7 +21,34 @@ class SutraDetailPage extends ConsumerWidget {
               onRetry: () =>
                   ref.invalidate(sutraDetailControllerProvider(slug)))),
       data: (s) => Scaffold(
-        appBar: AppBar(title: Text(s.title)),
+        appBar: AppBar(
+          title: Text(s.title),
+          actions: [
+            Consumer(
+              builder: (context, ref, _) {
+                final status = ref.watch(
+                    favoriteStatusProvider((type: 'sutra', slug: slug)));
+                return IconButton(
+                  icon: Icon(status.valueOrNull == true
+                      ? Icons.favorite
+                      : Icons.favorite_border),
+                  color: status.valueOrNull == true ? Colors.red : null,
+                  onPressed: () async {
+                    await ref
+                        .read(favoritesRepositoryProvider)
+                        .toggleFavorite(
+                            type: 'sutra',
+                            slug: slug,
+                            title: s.title,
+                            subtitle: s.category);
+                    ref.invalidate(
+                        favoriteStatusProvider((type: 'sutra', slug: slug)));
+                  },
+                );
+              },
+            ),
+          ],
+        ),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [

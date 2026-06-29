@@ -14,6 +14,7 @@ import '../../features/encyclopedia/encyclopedia_list_page.dart';
 import '../../features/profile/login_page.dart';
 import '../../features/profile/profile_page.dart';
 import '../../features/profile/settings_page.dart';
+import '../../features/favorites/favorites_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -132,7 +133,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/favorites',
       name: RouteNames.favorites,
-      builder: (context, state) => const _PlaceholderPage('Favorites'),
+      builder: (context, state) => const FavoritesPage(),
     ),
     GoRoute(
       path: '/notes',
