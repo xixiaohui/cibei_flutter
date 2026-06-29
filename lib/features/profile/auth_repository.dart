@@ -31,5 +31,6 @@ class AuthRepository {
 
   Future<void> signOut() async {
     await _api.post(ApiEndpoints.signOut);
+    _api.clearCookies();
   }
 }
