@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
+import 'core/router/app_router.dart';
 
 class CibeiApp extends ConsumerWidget {
   const CibeiApp({super.key});
@@ -17,7 +18,7 @@ class CibeiApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      routerConfig: null, // Placeholder — replaced in Task 5
+      routerConfig: appRouter,
       locale: const Locale('zh'),
       supportedLocales: const [Locale('zh'), Locale('en')],
       localizationsDelegates: const [
