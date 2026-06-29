@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'route_names.dart';
 import '../../features/home/home_page.dart';
+import '../../features/home/library_page.dart';
 import '../../features/sutra/sutra_detail_page.dart';
 import '../../features/sutra/sutra_reading_page.dart';
-import '../../features/sutra/sutra_list_page.dart';
 import '../../features/stories/story_list_page.dart';
 import '../../features/stories/story_detail_page.dart';
 import '../../features/dictionary/dictionary_detail_page.dart';
@@ -55,7 +55,7 @@ final appRouter = GoRouter(
           path: '/library',
           name: RouteNames.library,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: SutraListPage(),
+            child: LibraryPage(),
           ),
         ),
         GoRoute(
