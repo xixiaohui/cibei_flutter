@@ -23,30 +23,35 @@ class AppTypography {
 
     return TextTheme(
       displayLarge: TextStyle(
+        fontFamily: fontFamily,
         fontSize: largeTitleSize,
         fontWeight: FontWeight.w700,
         color: color,
         height: 1.2,
       ),
       headlineMedium: TextStyle(
+        fontFamily: fontFamily,
         fontSize: titleSize,
         fontWeight: FontWeight.w600,
         color: color,
         height: 1.3,
       ),
       bodyLarge: TextStyle(
+        fontFamily: fontFamily,
         fontSize: bodySize,
         fontWeight: FontWeight.w400,
         color: color,
         height: lineHeight,
       ),
       bodyMedium: TextStyle(
+        fontFamily: fontFamily,
         fontSize: captionSize,
         fontWeight: FontWeight.w400,
         color: secondaryColor,
         height: 1.5,
       ),
       labelMedium: TextStyle(
+        fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: secondaryColor,
