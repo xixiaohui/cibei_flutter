@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'route_names.dart';
+import '../../features/home/home_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -33,7 +34,7 @@ final appRouter = GoRouter(
           path: '/',
           name: RouteNames.home,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: _PlaceholderPage('Home'),
+            child: HomePage(),
           ),
         ),
         GoRoute(
