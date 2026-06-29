@@ -6,6 +6,7 @@ class RouteNames {
   static const String profile = 'profile';
   static const String sutraDetail = 'sutraDetail';
   static const String sutraRead = 'sutraRead';
+  static const String sutraList = 'sutraList';
   static const String glossaryList = 'glossaryList';
   static const String glossaryDetail = 'glossaryDetail';
   static const String encyclopediaList = 'encyclopediaList';

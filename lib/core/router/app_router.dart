@@ -4,6 +4,7 @@ import 'route_names.dart';
 import '../../features/home/home_page.dart';
 import '../../features/home/library_page.dart';
 import '../../features/sutra/sutra_detail_page.dart';
+import '../../features/sutra/sutra_list_page.dart';
 import '../../features/sutra/sutra_reading_page.dart';
 import '../../features/stories/story_list_page.dart';
 import '../../features/stories/story_detail_page.dart';
@@ -93,6 +94,13 @@ final appRouter = GoRouter(
       name: RouteNames.sutraRead,
       builder: (context, state) =>
           SutraReadingPage(slug: state.pathParameters['slug']!),
+    ),
+    GoRoute(
+      path: '/sutras',
+      name: RouteNames.sutraList,
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: SutraListPage(),
+      ),
     ),
     GoRoute(
       path: '/glossary',
