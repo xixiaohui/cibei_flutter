@@ -15,6 +15,7 @@ class RouteNames {
   static const String search = 'search';
   static const String favorites = 'favorites';
   static const String notes = 'notes';
+  static const String noteDetail = 'noteDetail';
   static const String settings = 'settings';
   static const String login = 'login';
   static const String pathDetail = 'pathDetail';

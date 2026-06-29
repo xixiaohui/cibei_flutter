@@ -18,6 +18,8 @@ import '../../features/profile/settings_page.dart';
 import '../../features/favorites/favorites_page.dart';
 import '../../features/search/search_page.dart';
 import '../../features/ai/ai_chat_page.dart';
+import '../../features/notes/notes_page.dart';
+import '../../features/notes/note_detail_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -148,7 +150,19 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/notes',
       name: RouteNames.notes,
-      builder: (context, state) => const _PlaceholderPage('Notes'),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: NotesPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/note/new',
+      builder: (context, state) => const NoteDetailPage(id: null),
+    ),
+    GoRoute(
+      path: '/note/:id',
+      name: RouteNames.noteDetail,
+      builder: (context, state) =>
+          NoteDetailPage(id: state.pathParameters['id']),
     ),
     GoRoute(
       path: '/settings',
