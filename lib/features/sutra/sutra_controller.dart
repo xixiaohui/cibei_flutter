@@ -6,7 +6,7 @@ import '../../shared/models/sutra_content.dart';
 import 'sutra_repository.dart';
 
 final sutraRepositoryProvider =
-    Provider((ref) => SutraRepository(ApiClient(), CacheManager()));
+    Provider((ref) => SutraRepository(ref.watch(apiClientProvider), CacheManager()));
 
 // Sutra list controller
 final sutraListControllerProvider = AsyncNotifierProvider.family<

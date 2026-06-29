@@ -5,7 +5,7 @@ import '../../shared/models/search_result.dart';
 import 'search_repository.dart';
 
 final searchRepositoryProvider = Provider(
-  (ref) => SearchRepository(ApiClient(), CacheManager()),
+  (ref) => SearchRepository(ref.watch(apiClientProvider), CacheManager()),
 );
 
 final searchResultsProvider =

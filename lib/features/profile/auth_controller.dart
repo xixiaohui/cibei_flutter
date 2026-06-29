@@ -3,7 +3,7 @@ import '../../core/api/api_client.dart';
 import '../../shared/models/user.dart';
 import 'auth_repository.dart';
 
-final authRepositoryProvider = Provider((ref) => AuthRepository(ApiClient()));
+final authRepositoryProvider = Provider((ref) => AuthRepository(ref.watch(apiClientProvider)));
 
 final sessionProvider = FutureProvider<SessionResponse?>((ref) {
   return ref.read(authRepositoryProvider).getSession();

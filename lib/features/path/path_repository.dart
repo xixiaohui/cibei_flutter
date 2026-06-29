@@ -39,7 +39,7 @@ class PathRepository {
   }
 
   Future<List<PathStep>> getPathSteps(String pathId) async {
-    final response = await _api.get('/api/paths/$pathId/steps');
+    final response = await _api.get(ApiEndpoints.pathSteps(pathId));
     return (response.data as List)
         .map((j) => PathStep.fromJson(j))
         .toList();

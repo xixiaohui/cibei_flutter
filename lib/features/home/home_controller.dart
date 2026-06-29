@@ -8,7 +8,7 @@ import '../../shared/models/glossary_term.dart';
 import 'home_repository.dart';
 
 final homeRepositoryProvider = Provider((ref) {
-  return HomeRepository(ApiClient(), CacheManager());
+  return HomeRepository(ref.watch(apiClientProvider), CacheManager());
 });
 
 final homeControllerProvider =
@@ -39,7 +39,12 @@ class HomeController extends AsyncNotifier<HomeState> {
     final cached = await repo.getCachedHome();
     if (cached['sutras'] != null) {
       // Return cached immediately, then refresh in background
-      ref.read(homeRepositoryProvider).getRecentSutras();
+      Future.wait([
+        ref.read(homeRepositoryProvider).getRecentSutras(),
+        ref.read(homeRepositoryProvider).getRecentStories(),
+        ref.read(homeRepositoryProvider).getLearningPaths(),
+        ref.read(homeRepositoryProvider).getPopularTerms(),
+      ]);
       return HomeState(
         sutras: cached['sutras'] as List<Sutra>,
         stories: (cached['stories'] as List<Story>?) ?? [],

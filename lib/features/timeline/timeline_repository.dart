@@ -36,7 +36,18 @@ class TimelineRepository {
   }
 
   Future<List<String>> getCategories() async {
-    final response = await _api.get('/api/timeline/categories');
-    return (response.data as List).cast<String>();
+    final response = await _api.get(ApiEndpoints.timeline,
+        queryParameters: {'pageSize': 100});
+    final data = response.data as Map<String, dynamic>;
+    final items = (data['items'] as List)
+        .map((j) => TimelineEvent.fromJson(j))
+        .toList();
+    final categories = items
+        .map((e) => e.category)
+        .where((c) => c.isNotEmpty)
+        .toSet()
+        .toList();
+    categories.sort();
+    return categories;
   }
 }

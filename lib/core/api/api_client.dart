@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../network/dio_client.dart';
 
 class ApiClient {
@@ -50,3 +51,5 @@ class ApiClient {
     _cookieJar.deleteAll();
   }
 }
+
+final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());

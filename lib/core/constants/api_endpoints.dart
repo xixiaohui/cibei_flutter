@@ -33,6 +33,7 @@ class ApiEndpoints {
   // Learning Paths
   static const String paths = '/api/paths';
   static String pathDetail(String slug) => '/api/paths/$slug';
+  static String pathSteps(String pathId) => '/api/paths/$pathId/steps';
 
   // Favorites
   static const String favorites = '/api/favorites';

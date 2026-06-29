@@ -5,7 +5,7 @@ import '../../shared/models/encyclopedia_entry.dart';
 import 'encyclopedia_repository.dart';
 
 final encyclopediaRepositoryProvider = Provider<EncyclopediaRepository>(
-    (ref) => EncyclopediaRepository(ApiClient(), CacheManager()));
+    (ref) => EncyclopediaRepository(ref.watch(apiClientProvider), CacheManager()));
 
 // Encyclopedia list controller
 final encyclopediaListControllerProvider = AsyncNotifierProvider.family<

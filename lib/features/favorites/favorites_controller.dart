@@ -4,7 +4,7 @@ import '../../shared/models/favorite.dart';
 import 'favorites_repository.dart';
 
 final favoritesRepositoryProvider =
-    Provider((ref) => FavoritesRepository(ApiClient()));
+    Provider((ref) => FavoritesRepository(ref.watch(apiClientProvider)));
 
 final favoritesProvider = AsyncNotifierProvider<FavoritesController, List<Favorite>>(
     () => FavoritesController());

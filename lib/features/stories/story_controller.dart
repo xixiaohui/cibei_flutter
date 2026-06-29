@@ -5,7 +5,7 @@ import '../../shared/models/story.dart';
 import 'story_repository.dart';
 
 final storyRepositoryProvider =
-    Provider((ref) => StoryRepository(ApiClient(), CacheManager()));
+    Provider((ref) => StoryRepository(ref.watch(apiClientProvider), CacheManager()));
 
 // Story list controller
 final storyListControllerProvider = AsyncNotifierProvider.family<

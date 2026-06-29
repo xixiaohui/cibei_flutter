@@ -5,7 +5,7 @@ import '../../shared/models/learning_path.dart';
 import 'path_repository.dart';
 
 final pathRepositoryProvider =
-    Provider((ref) => PathRepository(ApiClient(), CacheManager()));
+    Provider((ref) => PathRepository(ref.watch(apiClientProvider), CacheManager()));
 
 // Path list controller
 final pathListControllerProvider =
