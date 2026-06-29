@@ -4,11 +4,18 @@ import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import 'notes_controller.dart';
 
-class NotesPage extends ConsumerWidget {
+class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends ConsumerState<NotesPage> {
+  String _searchQuery = '';
+
+  @override
+  Widget build(BuildContext context) {
     final notesAsync = ref.watch(notesProvider);
 
     return Scaffold(
@@ -19,7 +26,7 @@ class NotesPage extends ConsumerWidget {
         children: [
           _SearchBar(
             onChanged: (query) {
-              // Search is handled by watching filtered results
+              setState(() => _searchQuery = query);
             },
           ),
           Expanded(
@@ -27,7 +34,18 @@ class NotesPage extends ConsumerWidget {
               loading: () => const LoadingIndicator(),
               error: (err, _) => Center(child: Text(err.toString())),
               data: (notes) {
-                if (notes.isEmpty) {
+                final filteredNotes = _searchQuery.isEmpty
+                    ? notes
+                    : notes
+                        .where((n) =>
+                            n.title
+                                .toLowerCase()
+                                .contains(_searchQuery.toLowerCase()) ||
+                            n.content
+                                .toLowerCase()
+                                .contains(_searchQuery.toLowerCase()))
+                        .toList();
+                if (filteredNotes.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -39,10 +57,11 @@ class NotesPage extends ConsumerWidget {
                                 .onSurface
                                 .withValues(alpha: 0.3)),
                         const SizedBox(height: 16),
-                        Text('暂无笔记',
+                        Text(_searchQuery.isEmpty ? '暂无笔记' : '未找到匹配的笔记',
                             style: Theme.of(context).textTheme.headlineMedium),
                         const SizedBox(height: 8),
-                        Text('点击右下角按钮创建你的第一条笔记',
+                        Text(
+                            _searchQuery.isEmpty ? '点击右下角按钮创建你的第一条笔记' : '尝试其他关键词搜索',
                             style: Theme.of(context).textTheme.bodyMedium),
                       ],
                     ),
@@ -50,9 +69,9 @@ class NotesPage extends ConsumerWidget {
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: notes.length,
+                  itemCount: filteredNotes.length,
                   itemBuilder: (context, index) {
-                    final note = notes[index];
+                    final note = filteredNotes[index];
                     final snippet = note.content.length > 80
                         ? '${note.content.substring(0, 80)}...'
                         : note.content;

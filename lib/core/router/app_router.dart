@@ -156,6 +156,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/note/new',
+      name: RouteNames.noteNew,
       builder: (context, state) => const NoteDetailPage(id: null),
     ),
     GoRoute(
