@@ -7,6 +7,7 @@ import '../../features/sutra/sutra_reading_page.dart';
 import '../../features/sutra/sutra_list_page.dart';
 import '../../features/stories/story_list_page.dart';
 import '../../features/stories/story_detail_page.dart';
+import '../../features/dictionary/dictionary_detail_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -89,7 +90,7 @@ final appRouter = GoRouter(
       path: '/glossary/:slug',
       name: RouteNames.glossaryDetail,
       builder: (context, state) =>
-          _PlaceholderPage('Glossary: ${state.pathParameters['slug']}'),
+          DictionaryDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/encyclopedia/:slug',
