@@ -15,6 +15,7 @@ import '../../features/profile/login_page.dart';
 import '../../features/profile/profile_page.dart';
 import '../../features/profile/settings_page.dart';
 import '../../features/favorites/favorites_page.dart';
+import '../../features/search/search_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -128,7 +129,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/search',
       name: RouteNames.search,
-      builder: (context, state) => const _PlaceholderPage('Search'),
+      builder: (context, state) => const SearchPage(),
     ),
     GoRoute(
       path: '/favorites',
