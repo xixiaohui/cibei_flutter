@@ -8,9 +8,12 @@ class TodaySutraCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.push('/sutra/${sutra.slug}'),
-      child: Container(
+    return Semantics(
+      label: '今日经典: ${sutra.title}',
+      button: true,
+      child: GestureDetector(
+        onTap: () => context.push('/sutra/${sutra.slug}'),
+        child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
@@ -43,6 +46,7 @@ class TodaySutraCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
       ),
     );
   }

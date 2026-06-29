@@ -29,44 +29,62 @@ class ReadingToolbar extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(
-                icon: Icon(Icons.text_decrease, color: fgColor),
-                onPressed: () =>
-                    ref.read(fontSizeProvider.notifier).state =
-                        (ref.read(fontSizeProvider) - 2).clamp(14, 34)),
-            Text('${ref.watch(fontSizeProvider).toInt()}pt',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium
-                    ?.copyWith(color: fgColor) ??
-                    TextStyle(color: fgColor)),
-            IconButton(
-                icon: Icon(Icons.text_increase, color: fgColor),
-                onPressed: () =>
-                    ref.read(fontSizeProvider.notifier).state =
-                        (ref.read(fontSizeProvider) + 2).clamp(14, 34)),
-            IconButton(
-                icon: Icon(Icons.format_line_spacing, color: fgColor),
-                onPressed: () =>
-                    ref.read(lineHeightProvider.notifier).state =
-                        ref.read(lineHeightProvider) == 1.8
-                            ? 2.2
-                            : ref.read(lineHeightProvider) == 2.2
-                                ? 2.6
-                                : 1.8),
-            IconButton(
-              icon: Icon(
-                isNightMode ? Icons.light_mode : Icons.dark_mode,
-                color: fgColor,
-              ),
-              onPressed: () => ref.read(isNightModeProvider.notifier).state =
-                  !ref.read(isNightModeProvider),
+            Semantics(
+              label: '减小字体',
+              child: IconButton(
+                  icon: Icon(Icons.text_decrease, color: fgColor),
+                  onPressed: () =>
+                      ref.read(fontSizeProvider.notifier).state =
+                          (ref.read(fontSizeProvider) - 2).clamp(14, 34)),
             ),
-            IconButton(
-                icon: Icon(Icons.width_normal, color: fgColor),
-                onPressed: () =>
-                    ref.read(readingWidthProvider.notifier).state =
-                        ref.read(readingWidthProvider) == 1.0 ? 0.85 : 1.0),
+            Semantics(
+              label: '字体大小: ${ref.watch(fontSizeProvider).toInt()}pt',
+              child: Text('${ref.watch(fontSizeProvider).toInt()}pt',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(color: fgColor) ??
+                      TextStyle(color: fgColor)),
+            ),
+            Semantics(
+              label: '增大字体',
+              child: IconButton(
+                  icon: Icon(Icons.text_increase, color: fgColor),
+                  onPressed: () =>
+                      ref.read(fontSizeProvider.notifier).state =
+                          (ref.read(fontSizeProvider) + 2).clamp(14, 34)),
+            ),
+            Semantics(
+              label: '调整行间距',
+              child: IconButton(
+                  icon: Icon(Icons.format_line_spacing, color: fgColor),
+                  onPressed: () =>
+                      ref.read(lineHeightProvider.notifier).state =
+                          ref.read(lineHeightProvider) == 1.8
+                              ? 2.2
+                              : ref.read(lineHeightProvider) == 2.2
+                                  ? 2.6
+                                  : 1.8),
+            ),
+            Semantics(
+              label: isNightMode ? '切换到日间模式' : '切换到夜间模式',
+              child: IconButton(
+                icon: Icon(
+                  isNightMode ? Icons.light_mode : Icons.dark_mode,
+                  color: fgColor,
+                ),
+                onPressed: () => ref.read(isNightModeProvider.notifier).state =
+                    !ref.read(isNightModeProvider),
+              ),
+            ),
+            Semantics(
+              label: '切换阅读宽度',
+              child: IconButton(
+                  icon: Icon(Icons.width_normal, color: fgColor),
+                  onPressed: () =>
+                      ref.read(readingWidthProvider.notifier).state =
+                          ref.read(readingWidthProvider) == 1.0 ? 0.85 : 1.0),
+            ),
           ],
         ),
       ),

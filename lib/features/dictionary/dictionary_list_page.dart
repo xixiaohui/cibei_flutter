@@ -123,39 +123,43 @@ class _GlossaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(term.term,
-                  style: Theme.of(context).textTheme.headlineMedium),
-              if (term.termEn != null || term.termSanskrit != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  [term.termEn, term.termSanskrit]
-                      .whereType<String>()
-                      .join(' / '),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                ),
+    return Semantics(
+      label: '词条: ${term.term}',
+      button: true,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(term.term,
+                    style: Theme.of(context).textTheme.headlineMedium),
+                if (term.termEn != null || term.termSanskrit != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    [term.termEn, term.termSanskrit]
+                        .whereType<String>()
+                        .join(' / '),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                  ),
+                ],
+                if (term.definition.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    term.definition,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
               ],
-              if (term.definition.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  term.definition,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),

@@ -32,26 +32,30 @@ class SutraReadingPage extends ConsumerWidget {
       body: content.when(
         loading: () => const LoadingIndicator(),
         error: (err, _) => ErrorDisplay(message: err.toString()),
-        data: (c) => Center(
-          child: Container(
-            color: bgColor,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * width,
-              child: Markdown(
-                data: c.content,
-                styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(
-                      fontSize: fontSize,
-                      height: lineHeight,
-                      color: textColor),
-                  h1: TextStyle(
-                      fontSize: fontSize + 10,
-                      fontWeight: FontWeight.w700,
-                      color: textColor),
-                  h2: TextStyle(
-                      fontSize: fontSize + 6,
-                      fontWeight: FontWeight.w600,
-                      color: textColor),
+        data: (c) => RefreshIndicator(
+          onRefresh: () async =>
+              ref.invalidate(sutraContentControllerProvider(slug)),
+          child: Center(
+            child: Container(
+              color: bgColor,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * width,
+                child: Markdown(
+                  data: c.content,
+                  styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(
+                        fontSize: fontSize,
+                        height: lineHeight,
+                        color: textColor),
+                    h1: TextStyle(
+                        fontSize: fontSize + 10,
+                        fontWeight: FontWeight.w700,
+                        color: textColor),
+                    h2: TextStyle(
+                        fontSize: fontSize + 6,
+                        fontWeight: FontWeight.w600,
+                        color: textColor),
+                  ),
                 ),
               ),
             ),

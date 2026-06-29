@@ -39,36 +39,40 @@ class ProfilePage extends ConsumerWidget {
               ),
             );
           }
-          return ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage:
-                    u.image != null ? NetworkImage(u.image!) : null,
-                child: u.image == null ? Text(u.name?[0] ?? '?') : null,
-              ),
-              const SizedBox(height: 12),
-              Text(u.name ?? u.email,
-                  style: Theme.of(context).textTheme.headlineMedium),
-              const Divider(height: 32),
-              _menuItem(context, '我的收藏', Icons.favorite_border,
-                  () => context.push('/favorites')),
-              _menuItem(context, '我的笔记', Icons.edit_note,
-                  () => context.push('/notes')),
-              _menuItem(context, '阅读历史', Icons.history, () {}),
-              _menuItem(context, '学习统计', Icons.bar_chart, () {}),
-              _menuItem(context, '设置', Icons.settings_outlined,
-                  () => context.push('/settings')),
-              const SizedBox(height: 24),
-              OutlinedButton(
-                onPressed: () async {
-                  await ref.read(authRepositoryProvider).signOut();
-                  ref.invalidate(sessionProvider);
-                },
-                child: const Text('退出登录'),
-              ),
-            ],
+          return RefreshIndicator(
+            onRefresh: () async =>
+                ref.invalidate(currentUserProvider),
+            child: ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage:
+                      u.image != null ? NetworkImage(u.image!) : null,
+                  child: u.image == null ? Text(u.name?[0] ?? '?') : null,
+                ),
+                const SizedBox(height: 12),
+                Text(u.name ?? u.email,
+                    style: Theme.of(context).textTheme.headlineMedium),
+                const Divider(height: 32),
+                _menuItem(context, '我的收藏', Icons.favorite_border,
+                    () => context.push('/favorites')),
+                _menuItem(context, '我的笔记', Icons.edit_note,
+                    () => context.push('/notes')),
+                _menuItem(context, '阅读历史', Icons.history, () {}),
+                _menuItem(context, '学习统计', Icons.bar_chart, () {}),
+                _menuItem(context, '设置', Icons.settings_outlined,
+                    () => context.push('/settings')),
+                const SizedBox(height: 24),
+                OutlinedButton(
+                  onPressed: () async {
+                    await ref.read(authRepositoryProvider).signOut();
+                    ref.invalidate(sessionProvider);
+                  },
+                  child: const Text('退出登录'),
+                ),
+              ],
+            ),
           );
         },
       ),
