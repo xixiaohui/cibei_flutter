@@ -38,8 +38,18 @@ class ChatController extends StateNotifier<AsyncValue<List<AiMessage>>> {
     state = AsyncData([...current, userMsg]);
 
     // Get AI response
-    final aiMsg = await repo.sendMessage(content);
-    await repo.saveMessage(aiMsg);
-    state = AsyncData([...state.valueOrNull ?? [], aiMsg]);
+    try {
+      final aiMsg = await repo.sendMessage(content);
+      await repo.saveMessage(aiMsg);
+      state = AsyncData([...state.valueOrNull ?? [], aiMsg]);
+    } catch (e) {
+      final errorMsg = AiMessage(
+        id: 'err_${DateTime.now().millisecondsSinceEpoch}',
+        role: 'assistant',
+        content: '抱歉，AI 响应失败，请稍后重试。',
+      );
+      await repo.saveMessage(errorMsg);
+      state = AsyncData([...state.valueOrNull ?? [], errorMsg]);
+    }
   }
 }
