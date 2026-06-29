@@ -17,6 +17,7 @@ import '../../features/profile/profile_page.dart';
 import '../../features/profile/settings_page.dart';
 import '../../features/favorites/favorites_page.dart';
 import '../../features/search/search_page.dart';
+import '../../features/ai/ai_chat_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -70,7 +71,7 @@ final appRouter = GoRouter(
           path: '/ai',
           name: RouteNames.ai,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: _PlaceholderPage('AI Chat'),
+            child: AiChatPage(),
           ),
         ),
         GoRoute(
