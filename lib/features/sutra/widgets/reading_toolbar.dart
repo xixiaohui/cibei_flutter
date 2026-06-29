@@ -11,10 +11,17 @@ class ReadingToolbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isNightMode = ref.watch(isNightModeProvider);
+    final isDark = isNightMode;
+    final bgColor =
+        isDark ? const Color(0xFF1E1E1E) : Theme.of(context).colorScheme.surface;
+    final fgColor =
+        isDark ? Colors.white70 : Theme.of(context).colorScheme.onSurface;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: bgColor,
         border:
             Border(top: BorderSide(color: Theme.of(context).dividerColor)),
       ),
@@ -23,19 +30,23 @@ class ReadingToolbar extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-                icon: const Icon(Icons.text_decrease),
+                icon: Icon(Icons.text_decrease, color: fgColor),
                 onPressed: () =>
                     ref.read(fontSizeProvider.notifier).state =
                         (ref.read(fontSizeProvider) - 2).clamp(14, 34)),
             Text('${ref.watch(fontSizeProvider).toInt()}pt',
-                style: Theme.of(context).textTheme.labelMedium),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.copyWith(color: fgColor) ??
+                    TextStyle(color: fgColor)),
             IconButton(
-                icon: const Icon(Icons.text_increase),
+                icon: Icon(Icons.text_increase, color: fgColor),
                 onPressed: () =>
                     ref.read(fontSizeProvider.notifier).state =
                         (ref.read(fontSizeProvider) + 2).clamp(14, 34)),
             IconButton(
-                icon: const Icon(Icons.format_line_spacing),
+                icon: Icon(Icons.format_line_spacing, color: fgColor),
                 onPressed: () =>
                     ref.read(lineHeightProvider.notifier).state =
                         ref.read(lineHeightProvider) == 1.8
@@ -44,14 +55,15 @@ class ReadingToolbar extends ConsumerWidget {
                                 ? 2.6
                                 : 1.8),
             IconButton(
-              icon: Icon(ref.watch(isNightModeProvider)
-                  ? Icons.light_mode
-                  : Icons.dark_mode),
+              icon: Icon(
+                isNightMode ? Icons.light_mode : Icons.dark_mode,
+                color: fgColor,
+              ),
               onPressed: () => ref.read(isNightModeProvider.notifier).state =
                   !ref.read(isNightModeProvider),
             ),
             IconButton(
-                icon: const Icon(Icons.width_normal),
+                icon: Icon(Icons.width_normal, color: fgColor),
                 onPressed: () =>
                     ref.read(readingWidthProvider.notifier).state =
                         ref.read(readingWidthProvider) == 1.0 ? 0.85 : 1.0),

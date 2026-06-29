@@ -14,8 +14,11 @@ class SutraDetailPage extends ConsumerWidget {
     final sutra = ref.watch(sutraDetailControllerProvider(slug));
     return sutra.when(
       loading: () => const Scaffold(body: LoadingIndicator()),
-      error: (err, _) =>
-          Scaffold(body: ErrorDisplay(message: err.toString())),
+      error: (err, _) => Scaffold(
+          body: ErrorDisplay(
+              message: err.toString(),
+              onRetry: () =>
+                  ref.invalidate(sutraDetailControllerProvider(slug)))),
       data: (s) => Scaffold(
         appBar: AppBar(title: Text(s.title)),
         body: ListView(

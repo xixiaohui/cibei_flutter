@@ -57,7 +57,10 @@ class _SutraListPageState extends ConsumerState<SutraListPage> {
                   return FilterChip(
                     label: Text(isAll ? '全部' : cat!),
                     selected: isSelected,
-                    onSelected: (_) => setState(() => _selectedCategory = cat),
+                    onSelected: (_) {
+                      _scrollController.jumpTo(0);
+                      setState(() => _selectedCategory = cat);
+                    },
                   );
                 },
               ),
