@@ -5,6 +5,8 @@ import '../../features/home/home_page.dart';
 import '../../features/sutra/sutra_detail_page.dart';
 import '../../features/sutra/sutra_reading_page.dart';
 import '../../features/sutra/sutra_list_page.dart';
+import '../../features/stories/story_list_page.dart';
+import '../../features/stories/story_detail_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -51,7 +53,7 @@ final appRouter = GoRouter(
           path: '/stories',
           name: RouteNames.stories,
           pageBuilder: (context, state) => const NoTransitionPage(
-            child: _PlaceholderPage('Stories'),
+            child: StoryListPage(),
           ),
         ),
         GoRoute(
@@ -99,7 +101,7 @@ final appRouter = GoRouter(
       path: '/story/:slug',
       name: RouteNames.storyDetail,
       builder: (context, state) =>
-          _PlaceholderPage('Story: ${state.pathParameters['slug']}'),
+          StoryDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/search',
