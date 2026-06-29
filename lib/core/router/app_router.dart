@@ -9,6 +9,8 @@ import '../../features/stories/story_list_page.dart';
 import '../../features/stories/story_detail_page.dart';
 import '../../features/dictionary/dictionary_detail_page.dart';
 import '../../features/dictionary/dictionary_list_page.dart';
+import '../../features/encyclopedia/encyclopedia_detail_page.dart';
+import '../../features/encyclopedia/encyclopedia_list_page.dart';
 
 // Placeholder pages — replaced with real pages in later tasks
 class _PlaceholderPage extends StatelessWidget {
@@ -101,10 +103,17 @@ final appRouter = GoRouter(
           DictionaryDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
+      path: '/encyclopedia',
+      name: RouteNames.encyclopediaList,
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: EncyclopediaListPage(),
+      ),
+    ),
+    GoRoute(
       path: '/encyclopedia/:slug',
       name: RouteNames.encyclopediaDetail,
       builder: (context, state) =>
-          _PlaceholderPage('Encyclopedia: ${state.pathParameters['slug']}'),
+          EncyclopediaDetailPage(slug: state.pathParameters['slug']!),
     ),
     GoRoute(
       path: '/story/:slug',

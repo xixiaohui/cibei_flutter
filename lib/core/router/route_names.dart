@@ -8,6 +8,7 @@ class RouteNames {
   static const String sutraRead = 'sutraRead';
   static const String glossaryList = 'glossaryList';
   static const String glossaryDetail = 'glossaryDetail';
+  static const String encyclopediaList = 'encyclopediaList';
   static const String encyclopediaDetail = 'encyclopediaDetail';
   static const String storyDetail = 'storyDetail';
   static const String search = 'search';
