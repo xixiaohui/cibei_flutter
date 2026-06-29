@@ -50,12 +50,20 @@ class EncyclopediaListController
         isLoadingMore: true));
     final repo = ref.read(encyclopediaRepositoryProvider);
     final nextPage = current.page + 1;
-    final result = await repo.getEntries(category: arg, page: nextPage);
-    state = AsyncData(EncyclopediaListState(
-      entries: [...current.entries, ...result.items],
-      page: result.page,
-      totalPages: result.totalPages,
-    ));
+    try {
+      final result = await repo.getEntries(category: arg, page: nextPage);
+      state = AsyncData(EncyclopediaListState(
+        entries: [...current.entries, ...result.items],
+        page: result.page,
+        totalPages: result.totalPages,
+      ));
+    } catch (_) {
+      state = AsyncData(EncyclopediaListState(
+        entries: current.entries,
+        page: current.page,
+        totalPages: current.totalPages,
+      ));
+    }
   }
 }
 

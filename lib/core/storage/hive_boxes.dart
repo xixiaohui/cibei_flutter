@@ -4,6 +4,7 @@ class HiveBoxes {
   static const String sutraContentCache = 'sutra_content_cache';
   static const String glossaryCache = 'glossary_cache';
   static const String storyCache = 'story_cache';
+  static const String encyclopediaCache = 'encyclopedia_cache';
   static const String readingHistory = 'reading_history';
   static const String searchHistory = 'search_history';
   static const String userSettings = 'user_settings';
@@ -17,6 +18,7 @@ class HiveBoxes {
     sutraContentCache,
     glossaryCache,
     storyCache,
+    encyclopediaCache,
     readingHistory,
     searchHistory,
     userSettings,

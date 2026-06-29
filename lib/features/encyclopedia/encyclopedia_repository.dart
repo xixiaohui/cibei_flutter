@@ -27,7 +27,7 @@ class EncyclopediaRepository {
         .toList();
     final cacheKey = 'list_${category ?? 'all'}_p$page';
     await _cache.put(
-        HiveBoxes.storyCache, cacheKey, jsonEncode(data['items']));
+        HiveBoxes.encyclopediaCache, cacheKey, jsonEncode(data['items']));
     return (
       items: items,
       total: data['total'] as int,
