@@ -1,0 +1,5 @@
+- v1.2
+- v1.1
+- v1.0
+- fix: architecture improvements from final review
+- feat: complete Cibei Space Mobile v1.0.0
