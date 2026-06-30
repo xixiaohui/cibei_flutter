@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api/api_client.dart';
+import '../../shared/models/app_exception.dart';
 import '../../shared/models/favorite.dart';
 import 'favorites_repository.dart';
 

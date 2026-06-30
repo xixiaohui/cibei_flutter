@@ -59,14 +59,20 @@ class ProfilePage extends ConsumerWidget {
                     () => context.push('/favorites')),
                 _menuItem(context, '我的笔记', Icons.edit_note,
                     () => context.push('/notes')),
-                _menuItem(context, '阅读历史', Icons.history, () {}),
-                _menuItem(context, '学习统计', Icons.bar_chart, () {}),
+                _menuItem(context, '阅读历史', Icons.history,
+                    () => context.push('/history')),
+                _menuItem(context, '学习统计', Icons.bar_chart,
+                    () => context.push('/stats')),
                 _menuItem(context, '设置', Icons.settings_outlined,
                     () => context.push('/settings')),
                 const SizedBox(height: 24),
                 OutlinedButton(
                   onPressed: () async {
-                    await ref.read(authRepositoryProvider).signOut();
+                    try {
+                      await ref.read(authRepositoryProvider).signOut();
+                    } catch (_) {
+                      // Ignore — signOut clears cookies regardless of server response
+                    }
                     ref.invalidate(sessionProvider);
                   },
                   child: const Text('退出登录'),

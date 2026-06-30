@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme_provider.dart';
 
-final fontSizeProvider = StateProvider<double>((ref) => 18.0);
-final lineHeightProvider = StateProvider<double>((ref) => 1.8);
-final readingWidthProvider = StateProvider<double>((ref) => 1.0);
-
 class ReadingToolbar extends ConsumerWidget {
   const ReadingToolbar({super.key});
 

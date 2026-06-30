@@ -43,6 +43,12 @@ class HomePage extends ConsumerWidget {
                           fontSize: 22,
                         ),
                   ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    tooltip: '搜索',
+                    onPressed: () => context.push('/search'),
+                  ),
                 ],
               ),
             ),

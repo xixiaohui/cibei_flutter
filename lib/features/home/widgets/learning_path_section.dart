@@ -15,7 +15,7 @@ class LearningPathSection extends StatelessWidget {
       children: [
         const SectionHeader(title: '学习路线', action: '查看全部'),
         SizedBox(
-          height: 140,
+          height: 160,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -39,13 +39,17 @@ class LearningPathSection extends StatelessWidget {
                     children: [
                       Text(path.icon,
                           style: const TextStyle(fontSize: 28)),
-                      const Spacer(),
-                      Text(
-                        path.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontSize: 16),
+                      const SizedBox(height: 8),
+                      Flexible(
+                        child: Text(
+                          path.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(fontSize: 16),
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(

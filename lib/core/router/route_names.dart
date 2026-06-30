@@ -21,5 +21,8 @@ class RouteNames {
   static const String login = 'login';
   static const String pathList = 'pathList';
   static const String pathDetail = 'pathDetail';
+  static const String posterPreview = 'posterPreview';
   static const String timeline = 'timeline';
+  static const String readingHistory = 'readingHistory';
+  static const String learningStats = 'learningStats';
 }

@@ -20,3 +20,11 @@ class Sutra with _$Sutra {
 
   factory Sutra.fromJson(Map<String, dynamic> json) => _$SutraFromJson(json);
 }
+
+/// CBETA source URL for this sutra.
+/// Returns null if cbetaId is not available.
+String? sutraSourceUrl(Sutra sutra) {
+  final id = sutra.cbetaId;
+  if (id == null || id.isEmpty) return null;
+  return 'https://cbetaonline.dila.edu.tw/zh/$id';
+}

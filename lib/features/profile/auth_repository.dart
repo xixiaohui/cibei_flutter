@@ -30,7 +30,11 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    await _api.post(ApiEndpoints.signOut);
+    try {
+      await _api.post(ApiEndpoints.signOut);
+    } catch (_) {
+      // Server may return redirect or empty body — ignore, just clear cookies
+    }
     _api.clearCookies();
   }
 }

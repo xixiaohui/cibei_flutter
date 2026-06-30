@@ -23,6 +23,9 @@ import '../../features/notes/note_detail_page.dart';
 import '../../features/path/path_list_page.dart';
 import '../../features/path/path_detail_page.dart';
 import '../../features/timeline/timeline_page.dart';
+import '../../features/poster/poster_preview_page.dart';
+import '../../features/history/reading_history_page.dart';
+import '../../features/profile/learning_stats_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -131,6 +134,25 @@ final appRouter = GoRouter(
       path: '/search',
       name: RouteNames.search,
       builder: (context, state) => const SearchPage(),
+    ),
+    GoRoute(
+      path: '/poster/:type/:slug',
+      name: RouteNames.posterPreview,
+      builder: (context, state) => PosterPreviewPage(
+        type: state.pathParameters['type']!,
+        slug: state.pathParameters['slug']!,
+        title: state.extra as String? ?? '',
+      ),
+    ),
+    GoRoute(
+      path: '/history',
+      name: RouteNames.readingHistory,
+      builder: (context, state) => const ReadingHistoryPage(),
+    ),
+    GoRoute(
+      path: '/stats',
+      name: RouteNames.learningStats,
+      builder: (context, state) => const LearningStatsPage(),
     ),
     GoRoute(
       path: '/favorites',
