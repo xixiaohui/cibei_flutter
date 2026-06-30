@@ -17,30 +17,25 @@ class TimelineRepository {
     int page = 1,
     int pageSize = 20,
   }) async {
-    final params = <String, dynamic>{'page': page, 'pageSize': pageSize};
-    if (category != null) params['category'] = category;
-    final response =
-        await _api.get(ApiEndpoints.timeline, queryParameters: params);
-    final data = response.data as Map<String, dynamic>;
-    final items = (data['items'] as List)
-        .map((j) => TimelineEvent.fromJson(j))
+    final response = await _api.get(ApiEndpoints.timeline);
+    // API returns a plain array, not a paginated wrapper.
+    final list = (response.data as List)
+        .map((j) => TimelineEvent.fromJson(j as Map<String, dynamic>))
         .toList();
     await _cache.put(
-        HiveBoxes.timelineCache, 'list_p$page', jsonEncode(data['items']));
+        HiveBoxes.timelineCache, 'list', jsonEncode(response.data));
     return (
-      items: items,
-      total: data['total'] as int,
-      page: data['page'] as int,
-      totalPages: data['totalPages'] as int
+      items: list,
+      total: list.length,
+      page: 1,
+      totalPages: 1,
     );
   }
 
   Future<List<String>> getCategories() async {
-    final response = await _api.get(ApiEndpoints.timeline,
-        queryParameters: {'pageSize': 100});
-    final data = response.data as Map<String, dynamic>;
-    final items = (data['items'] as List)
-        .map((j) => TimelineEvent.fromJson(j))
+    final response = await _api.get(ApiEndpoints.timeline);
+    final items = (response.data as List)
+        .map((j) => TimelineEvent.fromJson(j as Map<String, dynamic>))
         .toList();
     final categories = items
         .map((e) => e.category)

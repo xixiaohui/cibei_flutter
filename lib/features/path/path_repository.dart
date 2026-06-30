@@ -17,31 +17,33 @@ class PathRepository {
     int page = 1,
     int pageSize = 20,
   }) async {
-    final params = <String, dynamic>{'page': page, 'pageSize': pageSize};
-    final response =
-        await _api.get(ApiEndpoints.paths, queryParameters: params);
-    final data = response.data as Map<String, dynamic>;
-    final items =
-        (data['items'] as List).map((j) => LearningPath.fromJson(j)).toList();
-    await _cache.put(
-        HiveBoxes.pathCache, 'list_p$page', jsonEncode(data['items']));
+    final response = await _api.get(ApiEndpoints.paths);
+    // API returns a plain array, not a paginated wrapper.
+    final list = (response.data as List)
+        .map((j) => LearningPath.fromJson(j as Map<String, dynamic>))
+        .toList();
+    await _cache.put(HiveBoxes.pathCache, 'list', jsonEncode(response.data));
     return (
-      items: items,
-      total: data['total'] as int,
-      page: data['page'] as int,
-      totalPages: data['totalPages'] as int
+      items: list,
+      total: list.length,
+      page: 1,
+      totalPages: 1,
     );
   }
 
-  Future<LearningPath> getPathDetail(String slug) async {
+  Future<({LearningPath path, List<PathStep> steps})> getPathDetail(
+      String slug) async {
     final response = await _api.get(ApiEndpoints.pathDetail(slug));
-    return LearningPath.fromJson(response.data);
-  }
-
-  Future<List<PathStep>> getPathSteps(String pathId) async {
-    final response = await _api.get(ApiEndpoints.pathSteps(pathId));
-    return (response.data as List)
-        .map((j) => PathStep.fromJson(j))
+    final data = response.data as Map<String, dynamic>;
+    // API wraps path + steps: { path: {...}, steps: [...] }
+    final path =
+        LearningPath.fromJson(data['path'] as Map<String, dynamic>);
+    final rawSteps = (data['steps'] as List)
+        .map((j) => PathStep.fromJson(j as Map<String, dynamic>))
         .toList();
+    // Deduplicate by stepNumber — keeps the first occurrence of each step.
+    final seen = <int>{};
+    final steps = rawSteps.where((s) => seen.add(s.stepNumber)).toList();
+    return (path: path, steps: steps);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api/api_client.dart';
 import '../../core/storage/cache_manager.dart';
 import '../../shared/models/learning_path.dart';
+import '../../shared/models/path_step.dart';
 import 'path_repository.dart';
 
 final pathRepositoryProvider =
@@ -14,14 +15,7 @@ final pathListControllerProvider =
 
 class PathListState {
   final List<LearningPath> paths;
-  final int page;
-  final int totalPages;
-  final bool isLoadingMore;
-  const PathListState(
-      {this.paths = const [],
-      this.page = 1,
-      this.totalPages = 1,
-      this.isLoadingMore = false});
+  const PathListState({this.paths = const []});
 }
 
 class PathListController extends AsyncNotifier<PathListState> {
@@ -29,43 +23,28 @@ class PathListController extends AsyncNotifier<PathListState> {
   Future<PathListState> build() async {
     final repo = ref.read(pathRepositoryProvider);
     final result = await repo.getPaths();
-    return PathListState(
-        paths: result.items,
-        page: result.page,
-        totalPages: result.totalPages);
+    return PathListState(paths: result.items);
   }
+}
 
-  Future<void> loadMore() async {
-    final current = state.valueOrNull;
-    if (current == null ||
-        current.isLoadingMore ||
-        current.page >= current.totalPages) {
-      return;
-    }
-    state = AsyncData(PathListState(
-        paths: current.paths,
-        page: current.page,
-        totalPages: current.totalPages,
-        isLoadingMore: true));
-    final repo = ref.read(pathRepositoryProvider);
-    final nextPage = current.page + 1;
-    final result = await repo.getPaths(page: nextPage);
-    state = AsyncData(PathListState(
-      paths: [...current.paths, ...result.items],
-      page: result.page,
-      totalPages: result.totalPages,
-    ));
-  }
+// Path detail state
+class PathDetailState {
+  final LearningPath path;
+  final List<PathStep> steps;
+  const PathDetailState({required this.path, required this.steps});
 }
 
 // Path detail controller
 final pathDetailControllerProvider =
-    AsyncNotifierProvider.family<PathDetailController, LearningPath, String>(
+    AsyncNotifierProvider.family<PathDetailController, PathDetailState, String>(
         () => PathDetailController());
 
-class PathDetailController extends FamilyAsyncNotifier<LearningPath, String> {
+class PathDetailController
+    extends FamilyAsyncNotifier<PathDetailState, String> {
   @override
-  Future<LearningPath> build(String slug) async {
-    return ref.read(pathRepositoryProvider).getPathDetail(slug);
+  Future<PathDetailState> build(String slug) async {
+    final repo = ref.read(pathRepositoryProvider);
+    final result = await repo.getPathDetail(slug);
+    return PathDetailState(path: result.path, steps: result.steps);
   }
 }

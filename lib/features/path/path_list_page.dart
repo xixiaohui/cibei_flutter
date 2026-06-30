@@ -1,44 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/widgets/section_header.dart';
+import '../../core/widgets/error_display.dart';
+import '../../core/widgets/loading_indicator.dart';
+import 'path_controller.dart';
 
 class PathListPage extends ConsumerWidget {
   const PathListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(pathListControllerProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('学习路线')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          const SectionHeader(title: '系统学习路线', action: null),
-          const SizedBox(height: 12),
-          _PathCard(
-            title: '佛学入门',
-            subtitle: '从零开始了解佛教基础知识',
-            level: '入门',
-            stepCount: 12,
-            onTap: () => context.push('/paths/introduction'),
-          ),
-          const SizedBox(height: 12),
-          _PathCard(
-            title: '经典研读',
-            subtitle: '深入学习重要佛经文本',
-            level: '中级',
-            stepCount: 24,
-            onTap: () => context.push('/paths/sutra-study'),
-          ),
-          const SizedBox(height: 12),
-          _PathCard(
-            title: '禅修实践',
-            subtitle: '从理论到实践的禅修指导',
-            level: '高级',
-            stepCount: 16,
-            onTap: () => context.push('/paths/meditation'),
-          ),
-        ],
+      body: state.when(
+        data: (data) {
+          if (data.paths.isEmpty) {
+            return const Center(child: Text('暂无学习路线'));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(20),
+            itemCount: data.paths.length,
+            itemBuilder: (context, index) {
+              final path = data.paths[index];
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: index < data.paths.length - 1 ? 12 : 0),
+                child: _PathCard(
+                  title: path.title,
+                  subtitle: path.description,
+                  level: path.levelLabel,
+                  stepCount: path.stepCount,
+                  onTap: () => context.push('/paths/${path.slug}'),
+                ),
+              );
+            },
+          );
+        },
+        loading: () => const LoadingIndicator(),
+        error: (error, stack) => ErrorDisplay(
+          message: error.toString(),
+          onRetry: () => ref.invalidate(pathListControllerProvider),
+        ),
       ),
     );
   }
@@ -59,12 +63,28 @@ class _PathCard extends StatelessWidget {
     required this.onTap,
   });
 
+  Color _levelColor() {
+    switch (level) {
+      case '入门':
+        return const Color(0xFF4CAF50);
+      case '中级':
+        return const Color(0xFF2196F3);
+      case '高级':
+        return const Color(0xFFFF9800);
+      default:
+        return const Color(0xFF9E9E9E);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final levelColor = _levelColor();
+
     return Card(
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -83,26 +103,52 @@ class _PathCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontSize: 18)),
+                    Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text(subtitle,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    const SizedBox(height: 6),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.5,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Chip(label: Text(level, style: const TextStyle(fontSize: 12))),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: levelColor.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            level,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: levelColor,
+                            ),
+                          ),
+                        ),
                         const SizedBox(width: 8),
-                        Text('$stepCount课', style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                          '$stepCount 课',
+                          style: theme.textTheme.labelMedium,
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right),
+              const Icon(Icons.chevron_right, color: Colors.grey),
             ],
           ),
         ),

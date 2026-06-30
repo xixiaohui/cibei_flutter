@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -16,9 +17,18 @@ Dio createDioClient({CookieJar? cookieJar}) {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     },
+    // On web, withCredentials tells the browser to include cookies (HTTP-only
+    // session cookies managed by Better Auth) on cross-origin requests.
+    // On mobile, this is ignored — cookie_jar handles cookies instead.
+    extra: {
+      if (kIsWeb) 'withCredentials': true,
+    },
   ));
 
-  if (cookieJar != null) {
+  // On web, the browser manages cookies natively. Setting the Cookie header
+  // programmatically is blocked (it's a "forbidden" header). The cookie_jar
+  // interceptor is only safe on mobile platforms.
+  if (!kIsWeb && cookieJar != null) {
     dio.interceptors.add(CookieManager(cookieJar));
   }
   dio.interceptors.add(RetryInterceptor(dio));

@@ -1,58 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/widgets/error_display.dart';
+import '../../core/widgets/loading_indicator.dart';
+import 'timeline_controller.dart';
 
-class TimelinePage extends StatelessWidget {
+class TimelinePage extends ConsumerWidget {
   const TimelinePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(timelineListControllerProvider(null));
+
     return Scaffold(
       appBar: AppBar(title: const Text('佛教时间线')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          _TimelineNode(
-            year: '公元前6世纪',
-            title: '释迦牟尼诞生',
-            description: '佛陀诞生于古印度迦毗罗卫国',
-            isFirst: true,
-          ),
-          _TimelineNode(
-            year: '公元前5世纪',
-            title: '成道与初转法轮',
-            description: '佛陀在菩提树下悟道，于鹿野苑初转法轮',
-          ),
-          _TimelineNode(
-            year: '约公元前483年',
-            title: '佛陀涅槃',
-            description: '佛陀在拘尸那揭罗入灭',
-          ),
-          _TimelineNode(
-            year: '约公元前3世纪',
-            title: '阿育王弘法',
-            description: '阿育王皈依佛教，推动佛教向外传播',
-          ),
-          _TimelineNode(
-            year: '公元1世纪',
-            title: '大乘佛教兴起',
-            description: '大乘佛教思想开始形成并传播',
-          ),
-          _TimelineNode(
-            year: '公元1世纪左右',
-            title: '佛教传入中国',
-            description: '佛教经由丝绸之路传入中国',
-          ),
-          _TimelineNode(
-            year: '公元5-6世纪',
-            title: '禅宗创立',
-            description: '达摩东来，禅宗在中国逐渐形成',
-          ),
-          _TimelineNode(
-            year: '公元7世纪',
-            title: '玄奘西行',
-            description: '玄奘法师赴印度取经，翻译大量佛经',
-            isLast: true,
-          ),
-        ],
+      body: state.when(
+        data: (data) {
+          if (data.events.isEmpty) {
+            return const Center(child: Text('暂无数据'));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            itemCount: data.events.length,
+            itemBuilder: (context, index) {
+              final event = data.events[index];
+              final isFirst = index == 0;
+              final isLast = index == data.events.length - 1;
+              return _TimelineNode(
+                year: event.yearDisplay,
+                title: event.title,
+                description: event.description,
+                isFirst: isFirst,
+                isLast: isLast,
+              );
+            },
+          );
+        },
+        loading: () => const LoadingIndicator(),
+        error: (error, stack) => ErrorDisplay(
+          message: error.toString(),
+          onRetry: () => ref.invalidate(timelineListControllerProvider(null)),
+        ),
       ),
     );
   }
@@ -75,12 +62,13 @@ class _TimelineNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 60,
+            width: 72,
             child: Column(
               children: [
                 if (!isFirst) const SizedBox(height: 4),
@@ -106,24 +94,35 @@ class _TimelineNode extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.only(bottom: 28),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(year,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFFC9A24A),
-                            fontWeight: FontWeight.bold,
-                          )),
-                  const SizedBox(height: 4),
-                  Text(title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(fontSize: 18)),
-                  const SizedBox(height: 4),
-                  Text(description,
-                      style: Theme.of(context).textTheme.bodyMedium),
+                  Text(
+                    year,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: const Color(0xFFC9A24A),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.5,
+                    ),
+                  ),
+                  if (description.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      description,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.65,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

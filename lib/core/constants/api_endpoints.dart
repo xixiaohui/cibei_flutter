@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl = 'https://cibei.space';
+  static const String baseUrl = 'https://www.cibei.space';
 
   // Auth
   static const String signUp = '/api/auth/sign-up/email';

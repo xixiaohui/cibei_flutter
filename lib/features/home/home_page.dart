@@ -20,10 +20,34 @@ class HomePage extends ConsumerWidget {
     final state = ref.watch(homeControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Cibei Space')),
       body: Column(
         children: [
           const OfflineBanner(),
+          // ── Header: logo + 慈悲空间 ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 36,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    '慈悲空间',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Divider(height: 1),
           Expanded(
             child: state.when(
               loading: () => const LoadingIndicator(),
@@ -36,7 +60,7 @@ class HomePage extends ConsumerWidget {
                 child: ListView(
                   padding: const EdgeInsets.only(bottom: 32),
                   children: [
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     // Today's Sutra (first sutra as hero)
                     if (home.sutras.isNotEmpty)
                       TodaySutraCard(sutra: home.sutras.first),
