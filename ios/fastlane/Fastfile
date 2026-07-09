@@ -1,0 +1,86 @@
+# Fastlane Fastfile — CI/CD for 慈悲空间 iOS
+#
+# Before first use:
+#   1. Install: cd ios && bundle install
+#   2. Set env:  FASTLANE_APPLE_ID, FASTLANE_TEAM_ID
+#   3. Or use:   fastlane match init (for code signing)
+#
+# Usage:
+#   bundle exec fastlane build              # Build IPA only
+#   bundle exec fastlane beta               # Build + upload to TestFlight
+#   bundle exec fastlane match_dev          # Sync development certificates
+#   bundle exec fastlane match_appstore     # Sync distribution certificates
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    # Ensure Flutter is on PATH
+    ENV["PATH"] = "#{ENV["HOME"]}/flutter/bin:#{ENV["PATH"]}" unless ENV["PATH"].include?("flutter/bin")
+  end
+
+  desc "Build release IPA (no upload)"
+  lane :build do
+    # Clean and get dependencies
+    Dir.chdir("..") do
+      sh("flutter", "clean")
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "ios",
+         "--release",
+         "--no-codesign",
+         "--split-debug-info=build/debug-info")
+    end
+
+    # Package IPA with Fastlane (handles code signing)
+    gym(
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "./build/ios",
+      output_name: "cibei_space.ipa",
+      clean: false,
+      skip_package_ipa: false,
+      include_bitcode: false,
+      include_symbols: true,
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    build
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: "慈悲空间 iOS Build #{ENV["FLUTTER_BUILD_NUMBER"] || "latest"}",
+    )
+  end
+
+  desc "Sync development certificates via Match"
+  lane :match_dev do
+    match(
+      type: "development",
+      app_identifier: "com.xxh.cibeispace",
+      readonly: is_ci,
+    )
+  end
+
+  desc "Sync App Store distribution certificates via Match"
+  lane :match_appstore do
+    match(
+      type: "appstore",
+      app_identifier: "com.xxh.cibeispace",
+      readonly: is_ci,
+    )
+  end
+
+  desc "Refresh provisioning profiles"
+  lane :refresh_profiles do
+    match(
+      type: "appstore",
+      app_identifier: "com.xxh.cibeispace",
+      readonly: false,
+      force_for_new_devices: true,
+    )
+  end
+end
