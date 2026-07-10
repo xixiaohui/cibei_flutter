@@ -76,15 +76,17 @@ workflows:
   ios-release:
     <<: *common_instance
     name: iOS Release
+    integrations:
+      app_store_connect: cibei_space   # Uses the App Store Connect API key integration
     environment:
       groups:
-        # Create these groups in Codemagic UI → Environment variables:
-        #   - app_store_connect: APP_STORE_CONNECT_PRIVATE_KEY,
-        #                        APP_STORE_CONNECT_KEY_IDENTIFIER,
-        #                        APP_STORE_CONNECT_ISSUER_ID
         - app_store_connect
+        # Also add CERTIFICATE_PRIVATE_KEY to this group:
+        # Generate with: openssl genrsa -out private_key.pem 2048
+        # Paste the full PEM content as the value
       vars:
         <<: *common_env
+        BUNDLE_ID: com.xxh.cibeispace
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -92,10 +94,6 @@ workflows:
     cache:
       cache_paths:
         - ~/.pub-cache
-    ios_signing:
-      automatic: true
-      distribution_type: app_store
-      bundle_identifier: com.xxh.cibeispace
     triggering:
       events:
         - push
@@ -109,6 +107,17 @@ workflows:
           include: true
       cancel_previous_builds: true
     scripts:
+      - name: Keychain setup
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Add certificates to keychain
+        script: keychain add-certificates
+      - name: Apply code signing profiles
+        script: xcode-project use-profiles
       - name: Get Flutter dependencies
         script: |
           flutter pub get
@@ -125,12 +134,10 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        auth: integration
       email:
         recipients:
-          - 6619766@gmail.com   # TODO: replace with your email
+          - 6619766@gmail.com
 
   # ── PR Checks (lightweight, runs on every PR) ────────────────────
   pr-checks:
