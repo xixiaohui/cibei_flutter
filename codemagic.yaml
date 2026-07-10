@@ -76,14 +76,9 @@ workflows:
   ios-release:
     <<: *common_instance
     name: iOS Release
-    integrations:
-      app_store_connect: cibei_flutter   # Uses the App Store Connect API key integration
     environment:
       groups:
         - app_store_connect
-        # Also add CERTIFICATE_PRIVATE_KEY to this group:
-        # Generate with: openssl genrsa -out private_key.pem 2048
-        # Paste the full PEM content as the value
       vars:
         <<: *common_env
         BUNDLE_ID: com.xxh.cibeispace
@@ -134,7 +129,9 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        auth: integration
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
       email:
         recipients:
           - 6619766@gmail.com
