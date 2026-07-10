@@ -92,6 +92,10 @@ workflows:
     cache:
       cache_paths:
         - ~/.pub-cache
+    ios_signing:
+      automatic: true
+      distribution_type: app_store
+      bundle_identifier: com.xxh.cibeispace
     triggering:
       events:
         - push
