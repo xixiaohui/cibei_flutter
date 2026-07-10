@@ -12,5 +12,4 @@ TREE_SHAKE_ICONS=true
 // Disable widget creation tracking — production doesn't need this debug overhead
 TRACK_WIDGET_CREATION=false
 
-// Remove async causal stack traces — reduces binary size (~100KB+ savings)
-EXTRA_FRONT_END_OPTIONS=--no-causal-async-stacks
+// EXTRA_FRONT_END_OPTIONS removed — --no-causal-async-stacks is not a valid option in current Flutter
