@@ -1,16 +1,16 @@
 #include "Generated.xcconfig"
 
-# ── Production Build Configuration ──
-# Safe to check into version control
+// Production Build Configuration
+// Safe to check into version control
 
-# Dart obfuscation — renames identifiers to make reverse engineering harder
+// Dart obfuscation — renames identifiers to make reverse engineering harder
 DART_OBFUSCATION=true
 
-# Tree-shake icon fonts — removes unused Material Icons glyphs (~200KB savings)
+// Tree-shake icon fonts — removes unused Material Icons glyphs (~200KB savings)
 TREE_SHAKE_ICONS=true
 
-# Disable widget creation tracking — production doesn't need this debug overhead
+// Disable widget creation tracking — production doesn't need this debug overhead
 TRACK_WIDGET_CREATION=false
 
-# Remove async causal stack traces — reduces binary size (~100KB+ savings)
+// Remove async causal stack traces — reduces binary size (~100KB+ savings)
 EXTRA_FRONT_END_OPTIONS=--no-causal-async-stacks
