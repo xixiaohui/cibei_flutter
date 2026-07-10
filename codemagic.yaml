@@ -111,6 +111,17 @@ workflows:
         script: keychain add-certificates
       - name: Apply code signing profiles
         script: xcode-project use-profiles
+      - name: Verify no Game Center in entitlements
+        script: |
+          ENTITLEMENTS="ios/Runner/Runner.entitlements"
+          echo "=== Checking $ENTITLEMENTS ==="
+          cat "$ENTITLEMENTS"
+          if /usr/libexec/PlistBuddy -c "Print :com.apple.developer.game-center" "$ENTITLEMENTS" 2>/dev/null; then
+            echo "ERROR: Game Center found in entitlements!"
+            exit 1
+          else
+            echo "OK: No Game Center in entitlements"
+          fi
       - name: Get Flutter dependencies
         script: |
           flutter pub get
