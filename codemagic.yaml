@@ -13,64 +13,62 @@ definitions:
     PACKAGE_NAME: com.xxh.cibei_space
 
 workflows:
-  # ── Android Release ──────────────────────────────────────────────
-  android-release:
-    <<: *common_instance
-    name: Android Release
-    environment:
-      groups:
-        # Create these groups in Codemagic UI → Environment variables:
-        #   - android_keystore: STORE_FILE, STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
-        - android_keystore
-      vars:
-        <<: *common_env
-      flutter: stable   # or pin a version, e.g. 3.32.0
-      java: 17
-    cache:
-      cache_paths:
-        - ~/.pub-cache
-    triggering:
-      events:
-        - push
-        - tag
-      branch_patterns:
-        - pattern: 'main'
-          include: true
-          source: true
-      tag_patterns:
-        - pattern: 'v*'
-          include: true
-      cancel_previous_builds: true
-    scripts:
-      - name: Set up keystore
-        script: |
-          cat <<EOF > "$FCI_BUILD_DIR/android/key.properties"
-          storeFile=$STORE_FILE
-          storePassword=$STORE_PASSWORD
-          keyAlias=$KEY_ALIAS
-          keyPassword=$KEY_PASSWORD
-          EOF
-      - name: Get Flutter dependencies
-        script: flutter pub get
-      - name: Run code generation
-        script: dart run build_runner build --delete-conflicting-outputs
-      - name: Run tests
-        script: flutter test --no-pub
-      - name: Build APK (release)
-        script: |
-          flutter build apk --release \
-            --build-number=$PROJECT_BUILD_NUMBER
-      - name: Build AAB (release)
-        script: |
-          flutter build appbundle --release \
-            --build-number=$PROJECT_BUILD_NUMBER
-    artifacts:
-      - build/app/outputs/apk/release/app-release.apk
-      - build/app/outputs/bundle/release/app-release.aab
-    publishing:
-      email:
-        recipients:
-          - 6619766@gmail.com   # TODO: replace with your email
+  # ── Android Release (disabled for now) ───────────────────────────
+  # android-release:
+  #   <<: *common_instance
+  #   name: Android Release
+  #   environment:
+  #     groups:
+  #       - android_keystore
+  #     vars:
+  #       <<: *common_env
+  #     flutter: stable
+  #     java: 17
+  #   cache:
+  #     cache_paths:
+  #       - ~/.pub-cache
+  #   triggering:
+  #     events:
+  #       - push
+  #       - tag
+  #     branch_patterns:
+  #       - pattern: 'main'
+  #         include: true
+  #         source: true
+  #     tag_patterns:
+  #       - pattern: 'v*'
+  #         include: true
+  #     cancel_previous_builds: true
+  #   scripts:
+  #     - name: Set up keystore
+  #       script: |
+  #         cat <<EOF > "$FCI_BUILD_DIR/android/key.properties"
+  #         storeFile=$STORE_FILE
+  #         storePassword=$STORE_PASSWORD
+  #         keyAlias=$KEY_ALIAS
+  #         keyPassword=$KEY_PASSWORD
+  #         EOF
+  #     - name: Get Flutter dependencies
+  #       script: flutter pub get
+  #     - name: Run code generation
+  #       script: dart run build_runner build --delete-conflicting-outputs
+  #     - name: Run tests
+  #       script: flutter test --no-pub
+  #     - name: Build APK (release)
+  #       script: |
+  #         flutter build apk --release \
+  #           --build-number=$PROJECT_BUILD_NUMBER
+  #     - name: Build AAB (release)
+  #       script: |
+  #         flutter build appbundle --release \
+  #           --build-number=$PROJECT_BUILD_NUMBER
+  #   artifacts:
+  #     - build/app/outputs/apk/release/app-release.apk
+  #     - build/app/outputs/bundle/release/app-release.aab
+  #   publishing:
+  #     email:
+  #       recipients:
+  #         - 6619766@gmail.com
 
   # ── iOS Release ──────────────────────────────────────────────────
   ios-release:
