@@ -77,7 +77,7 @@ workflows:
     <<: *common_instance
     name: iOS Release
     integrations:
-      app_store_connect: cibei_space   # Uses the App Store Connect API key integration
+      app_store_connect: cibei_flutter   # Uses the App Store Connect API key integration
     environment:
       groups:
         - app_store_connect
