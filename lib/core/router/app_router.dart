@@ -17,7 +17,6 @@ import '../../features/profile/profile_page.dart';
 import '../../features/profile/settings_page.dart';
 import '../../features/favorites/favorites_page.dart';
 import '../../features/search/search_page.dart';
-import '../../features/ai/ai_chat_page.dart';
 import '../../features/notes/notes_page.dart';
 import '../../features/notes/note_detail_page.dart';
 import '../../features/path/path_list_page.dart';
@@ -60,13 +59,6 @@ final appRouter = GoRouter(
           name: RouteNames.stories,
           pageBuilder: (context, state) => const NoTransitionPage(
             child: StoryListPage(),
-          ),
-        ),
-        GoRoute(
-          path: '/ai',
-          name: RouteNames.ai,
-          pageBuilder: (context, state) => const NoTransitionPage(
-            child: AiChatPage(),
           ),
         ),
         GoRoute(
@@ -220,8 +212,7 @@ class _ScaffoldWithNavShell extends StatelessWidget {
   int _currentIndex() {
     if (currentLocation.startsWith('/library')) return 1;
     if (currentLocation.startsWith('/stories')) return 2;
-    if (currentLocation.startsWith('/ai')) return 3;
-    if (currentLocation.startsWith('/profile')) return 4;
+    if (currentLocation.startsWith('/profile')) return 3;
     return 0;
   }
 
@@ -232,7 +223,7 @@ class _ScaffoldWithNavShell extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex(),
         onDestinationSelected: (index) {
-          final locations = ['/', '/library', '/stories', '/ai', '/profile'];
+          final locations = ['/', '/library', '/stories', '/profile'];
           final router = GoRouter.of(context);
           if (locations[index] != currentLocation) {
             router.go(locations[index]);
@@ -251,10 +242,6 @@ class _ScaffoldWithNavShell extends StatelessWidget {
               icon: Icon(Icons.auto_stories_outlined),
               selectedIcon: Icon(Icons.auto_stories),
               label: '故事'),
-          NavigationDestination(
-              icon: Icon(Icons.psychology_outlined),
-              selectedIcon: Icon(Icons.psychology),
-              label: 'AI'),
           NavigationDestination(
               icon: Icon(Icons.person_outline),
               selectedIcon: Icon(Icons.person),

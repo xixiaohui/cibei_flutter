@@ -111,19 +111,34 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       body: ListView(
         children: [
           const _SectionHeader('外观'),
-          ListTile(
-            title: const Text('深色模式'),
-            subtitle: const Text('选择应用的主题模式'),
-            trailing: SegmentedButton<ThemeMode>(
-              segments: const [
-                ButtonSegment(
-                    value: ThemeMode.system, label: Text('跟随系统')),
-                ButtonSegment(value: ThemeMode.light, label: Text('浅色')),
-                ButtonSegment(value: ThemeMode.dark, label: Text('深色')),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('深色模式', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 4),
+                Text('选择应用的主题模式',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.color)),
+                const SizedBox(height: 12),
+                SegmentedButton<ThemeMode>(
+                  segments: const [
+                    ButtonSegment(
+                        value: ThemeMode.system, label: Text('跟随系统')),
+                    ButtonSegment(
+                        value: ThemeMode.light, label: Text('浅色')),
+                    ButtonSegment(
+                        value: ThemeMode.dark, label: Text('深色')),
+                  ],
+                  selected: {themeMode},
+                  onSelectionChanged: (v) =>
+                      ref.read(themeModeProvider.notifier).state = v.first,
+                ),
               ],
-              selected: {themeMode},
-              onSelectionChanged: (v) =>
-                  ref.read(themeModeProvider.notifier).state = v.first,
             ),
           ),
           const _SectionHeader('阅读'),

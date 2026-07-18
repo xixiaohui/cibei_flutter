@@ -1,6 +1,7 @@
 # Codemagic CI/CD configuration for cibei_space (慈悲空间)
 # Docs: https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/
 
+
 definitions:
   # Shared instance config via YAML anchor — reuse across workflows
   common_instance: &common_instance

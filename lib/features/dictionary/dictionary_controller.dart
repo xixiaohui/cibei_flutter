@@ -71,3 +71,8 @@ class DictionaryDetailController
     return ref.read(dictionaryRepositoryProvider).getTermDetail(slug);
   }
 }
+
+/// Provides a term-name → slug lookup map for resolving related terms.
+final termSlugMapProvider = FutureProvider<Map<String, String>>((ref) {
+  return ref.read(dictionaryRepositoryProvider).getTermSlugMap();
+});

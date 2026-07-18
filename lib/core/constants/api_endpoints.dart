@@ -9,22 +9,22 @@ class ApiEndpoints {
 
   // Sutras
   static const String sutras = '/api/sutras';
-  static String sutraDetail(String slug) => '/api/sutras/$slug';
-  static String sutraContent(String slug) => '/api/sutras/$slug/content';
+  static String sutraDetail(String slug) => '/api/sutras/${Uri.encodeComponent(slug)}';
+  static String sutraContent(String slug) => '/api/sutras/${Uri.encodeComponent(slug)}/content';
   static const String sutraCategories = '/api/sutras/categories';
 
   // Glossary
   static const String glossary = '/api/glossary';
-  static String glossaryDetail(String slug) => '/api/glossary/$slug';
+  static String glossaryDetail(String slug) => '/api/glossary/${Uri.encodeComponent(slug)}';
 
   // Encyclopedia
   static const String encyclopedia = '/api/encyclopedia';
-  static String encyclopediaDetail(String slug) => '/api/encyclopedia/$slug';
+  static String encyclopediaDetail(String slug) => '/api/encyclopedia/${Uri.encodeComponent(slug)}';
   static const String encyclopediaCategories = '/api/encyclopedia/categories';
 
   // Stories
   static const String stories = '/api/stories';
-  static String storyDetail(String slug) => '/api/stories/$slug';
+  static String storyDetail(String slug) => '/api/stories/${Uri.encodeComponent(slug)}';
   static const String storyCategories = '/api/stories/categories';
 
   // Timeline
@@ -32,8 +32,8 @@ class ApiEndpoints {
 
   // Learning Paths
   static const String paths = '/api/paths';
-  static String pathDetail(String slug) => '/api/paths/$slug';
-  static String pathSteps(String pathId) => '/api/paths/$pathId/steps';
+  static String pathDetail(String slug) => '/api/paths/${Uri.encodeComponent(slug)}';
+  static String pathSteps(String pathId) => '/api/paths/${Uri.encodeComponent(pathId)}/steps';
 
   // Favorites
   static const String favorites = '/api/favorites';
@@ -44,7 +44,7 @@ class ApiEndpoints {
   static const String search = '/api/search';
 
   // Poster
-  static String poster(String type, String slug) => '/api/poster/$type/$slug';
+  static String poster(String type, String slug) => '/api/poster/${Uri.encodeComponent(type)}/${Uri.encodeComponent(slug)}';
 
   // AI
   static const String aiChat = '/api/ai/chat';

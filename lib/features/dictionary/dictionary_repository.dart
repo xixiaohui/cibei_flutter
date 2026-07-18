@@ -39,4 +39,22 @@ class DictionaryRepository {
     final response = await _api.get(ApiEndpoints.glossaryDetail(slug));
     return GlossaryTerm.fromJson(response.data);
   }
+
+  /// Fetches all glossary terms and builds a term-name → slug map.
+  /// Used to resolve related-term names (which are display names, not slugs).
+  Future<Map<String, String>> getTermSlugMap() async {
+    final response = await _api.get(ApiEndpoints.glossary, queryParameters: {
+      'page': 1,
+      'pageSize': 999,
+    });
+    final data = response.data as Map<String, dynamic>;
+    final items = (data['items'] as List)
+        .map((j) => GlossaryTerm.fromJson(j))
+        .toList();
+    final map = <String, String>{};
+    for (final term in items) {
+      map[term.term] = term.slug;
+    }
+    return map;
+  }
 }

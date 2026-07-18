@@ -16,6 +16,7 @@ class DictionaryDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final term = ref.watch(dictionaryDetailControllerProvider(slug));
+    final termSlugMap = ref.watch(termSlugMapProvider);
     ref.listen(dictionaryDetailControllerProvider(slug), (_, next) {
       next.whenOrNull(data: (t) {
         ref.read(readingHistoryRepositoryProvider).addEntry(
@@ -90,10 +91,11 @@ class DictionaryDetailPage extends ConsumerWidget {
                 spacing: 8,
                 runSpacing: 4,
                 children: t.relatedTerms.map((related) {
+                  final resolvedSlug = termSlugMap.valueOrNull?[related] ?? related;
                   return ActionChip(
                     label: Text(related),
                     onPressed: () =>
-                        context.push('/glossary/$related'),
+                        context.push('/glossary/${Uri.encodeComponent(resolvedSlug)}'),
                   );
                 }).toList(),
               ),
