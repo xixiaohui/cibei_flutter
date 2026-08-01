@@ -8,7 +8,7 @@ class ReadingToolbar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isNightMode = ref.watch(isNightModeProvider);
-    final isDark = isNightMode;
+    final isDark = isNightMode || Theme.of(context).brightness == Brightness.dark;
     final bgColor =
         isDark ? const Color(0xFF1E1E1E) : Theme.of(context).colorScheme.surface;
     final fgColor =
