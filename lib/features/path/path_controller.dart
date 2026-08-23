@@ -6,7 +6,8 @@ import '../../shared/models/path_step.dart';
 import 'path_repository.dart';
 
 final pathRepositoryProvider =
-    Provider((ref) => PathRepository(ref.watch(apiClientProvider), CacheManager()));
+    Provider((ref) => PathRepository(
+        ref.watch(apiClientProvider), ref.watch(cacheManagerProvider)));
 
 // Path list controller
 final pathListControllerProvider =

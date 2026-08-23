@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/widgets/responsive.dart';
 import 'auth_controller.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -42,7 +43,9 @@ class ProfilePage extends ConsumerWidget {
           return RefreshIndicator(
             onRefresh: () async =>
                 ref.invalidate(currentUserProvider),
-            child: ListView(
+            child: ContentContainer(
+              maxWidth: Responsive.maxContentWidth,
+              child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
                 CircleAvatar(
@@ -78,6 +81,7 @@ class ProfilePage extends ConsumerWidget {
                   child: const Text('退出登录'),
                 ),
               ],
+              ),
             ),
           );
         },

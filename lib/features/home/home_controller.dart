@@ -8,7 +8,8 @@ import '../../shared/models/glossary_term.dart';
 import 'home_repository.dart';
 
 final homeRepositoryProvider = Provider((ref) {
-  return HomeRepository(ref.watch(apiClientProvider), CacheManager());
+  return HomeRepository(
+      ref.watch(apiClientProvider), ref.watch(cacheManagerProvider));
 });
 
 final homeControllerProvider =

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/error_display.dart';
 import '../../core/widgets/loading_indicator.dart';
+import '../../core/widgets/responsive.dart';
 import 'path_controller.dart';
 
 class PathListPage extends ConsumerWidget {
@@ -19,23 +20,26 @@ class PathListPage extends ConsumerWidget {
           if (data.paths.isEmpty) {
             return const Center(child: Text('暂无学习路线'));
           }
-          return ListView.builder(
-            padding: const EdgeInsets.all(20),
-            itemCount: data.paths.length,
-            itemBuilder: (context, index) {
-              final path = data.paths[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                    bottom: index < data.paths.length - 1 ? 12 : 0),
-                child: _PathCard(
-                  title: path.title,
-                  subtitle: path.description,
-                  level: path.levelLabel,
-                  stepCount: path.stepCount,
-                  onTap: () => context.push('/paths/${path.slug}'),
-                ),
-              );
-            },
+          return ContentContainer(
+            maxWidth: Responsive.maxContentWidth,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(20),
+              itemCount: data.paths.length,
+              itemBuilder: (context, index) {
+                final path = data.paths[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: index < data.paths.length - 1 ? 12 : 0),
+                  child: _PathCard(
+                    title: path.title,
+                    subtitle: path.description,
+                    level: path.levelLabel,
+                    stepCount: path.stepCount,
+                    onTap: () => context.push('/paths/${path.slug}'),
+                  ),
+                );
+              },
+            ),
           );
         },
         loading: () => const LoadingIndicator(),

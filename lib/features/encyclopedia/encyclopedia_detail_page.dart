@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
-import '../../shared/models/app_exception.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/widgets/share_poster_button.dart';
 import '../favorites/favorites_controller.dart';
 import '../history/reading_history_page.dart';
@@ -63,7 +63,9 @@ class EncyclopediaDetailPage extends ConsumerWidget {
             ),
           ],
         ),
-        body: ListView(
+        body: ContentContainer(
+          maxWidth: Responsive.maxReadingWidth,
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             if (e.category != null) ...[
@@ -91,6 +93,7 @@ class EncyclopediaDetailPage extends ConsumerWidget {
             Text(e.content,
                 style: Theme.of(context).textTheme.bodyLarge),
           ],
+        ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/models/encyclopedia_entry.dart';
 import 'encyclopedia_controller.dart';
 
@@ -85,26 +86,29 @@ class _EncyclopediaListPageState extends ConsumerState<EncyclopediaListPage> {
               data: (data) => RefreshIndicator(
                 onRefresh: () async => ref.invalidate(
                     encyclopediaListControllerProvider(_selectedCategory)),
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 8, bottom: 32),
-                  itemCount:
-                      data.entries.length + (data.isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= data.entries.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                            child:
-                                CircularProgressIndicator(strokeWidth: 2)),
-                      );
-                    }
-                    final entry = data.entries[index];
-                    return _EncyclopediaCard(
-                        entry: entry,
-                        onTap: () =>
-                            context.push('/encyclopedia/${entry.slug}'));
-                  },
+                child: ContentContainer(
+                  maxWidth: Responsive.maxContentWidth,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(top: 8, bottom: 32),
+                    itemCount:
+                        data.entries.length + (data.isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= data.entries.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2)),
+                        );
+                      }
+                      final entry = data.entries[index];
+                      return _EncyclopediaCard(
+                          entry: entry,
+                          onTap: () =>
+                              context.push('/encyclopedia/${entry.slug}'));
+                    },
+                  ),
                 ),
               ),
             ),

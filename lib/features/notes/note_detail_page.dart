@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/loading_indicator.dart';
+import '../../core/widgets/responsive.dart';
 import 'notes_controller.dart';
 
 class NoteDetailPage extends ConsumerStatefulWidget {
@@ -75,35 +76,42 @@ class _NoteDetailPageState extends ConsumerState<NoteDetailPage> {
   }
 
   Widget _buildEditor(bool isNew) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              hintText: '标题',
-              border: InputBorder.none,
-            ),
-            style: Theme.of(context).textTheme.headlineSmall,
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: TextField(
-              controller: _contentController,
-              decoration: const InputDecoration(
-                hintText: '开始记录...',
-                border: InputBorder.none,
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+            maxWidth: Responsive.maxReadingWidth),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  hintText: '标题',
+                  border: InputBorder.none,
+                ),
+                style: Theme.of(context).textTheme.headlineSmall,
+                textInputAction: TextInputAction.next,
               ),
-              maxLines: null,
-              expands: true,
-              textAlignVertical: TextAlignVertical.top,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: TextField(
+                  controller: _contentController,
+                  decoration: const InputDecoration(
+                    hintText: '开始记录...',
+                    border: InputBorder.none,
+                  ),
+                  maxLines: null,
+                  expands: true,
+                  textAlignVertical: TextAlignVertical.top,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

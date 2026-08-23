@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/error_display.dart';
 import '../../core/widgets/loading_indicator.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/models/timeline_event.dart';
 import 'timeline_controller.dart';
 
@@ -43,7 +44,12 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               ? sorted
               : sorted.where((e) => e.category == _selectedCategory).toList();
 
-          return Column(
+          return SafeArea(
+            child: Center(
+              child: ConstrainedBox(
+                constraints:
+                    const BoxConstraints(maxWidth: Responsive.maxContentWidth),
+                child: Column(
             children: [
               // Category filter chips
               categoriesAsync.when(
@@ -128,6 +134,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                       ),
               ),
             ],
+                ),
+              ),
+            ),
           );
         },
       ),

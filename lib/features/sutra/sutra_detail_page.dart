@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
-import '../../shared/models/app_exception.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/models/sutra.dart';
 import '../../shared/widgets/share_poster_button.dart';
 import '../favorites/favorites_controller.dart';
@@ -61,7 +61,9 @@ class SutraDetailPage extends ConsumerWidget {
             ),
           ],
         ),
-        body: ListView(
+        body: ContentContainer(
+          maxWidth: Responsive.maxReadingWidth,
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             Text(s.title, style: Theme.of(context).textTheme.displayLarge),
@@ -101,6 +103,7 @@ class SutraDetailPage extends ConsumerWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

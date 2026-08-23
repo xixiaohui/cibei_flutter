@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/storage/cache_manager.dart';
+import '../../core/widgets/responsive.dart';
 import 'reading_history_repository.dart';
 
 final readingHistoryRepositoryProvider =
@@ -73,32 +74,35 @@ class ReadingHistoryPage extends ConsumerWidget {
                 ],
               ),
             )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: grouped.length,
-              itemBuilder: (context, index) {
-                final group = grouped[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                      child: Text(group.label,
-                          style: Theme.of(context).textTheme.labelMedium),
-                    ),
-                    ...group.entries.map((entry) => ListTile(
-                          leading: Icon(_typeIcon(entry.type)),
-                          title: Text(entry.title,
-                              maxLines: 1, overflow: TextOverflow.ellipsis),
-                          subtitle: Text(_formatTime(entry.timestamp)),
-                          trailing: Text(_typeLabel(entry.type),
-                              style: Theme.of(context).textTheme.labelMedium),
-                          onTap: () => context.push('/${entry.type}/${entry.slug}'),
-                        )),
-                  ],
-                );
-              },
+          : ContentContainer(
+              maxWidth: Responsive.maxContentWidth,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: grouped.length,
+                itemBuilder: (context, index) {
+                  final group = grouped[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: Text(group.label,
+                            style: Theme.of(context).textTheme.labelMedium),
+                      ),
+                      ...group.entries.map((entry) => ListTile(
+                            leading: Icon(_typeIcon(entry.type)),
+                            title: Text(entry.title,
+                                maxLines: 1, overflow: TextOverflow.ellipsis),
+                            subtitle: Text(_formatTime(entry.timestamp)),
+                            trailing: Text(_typeLabel(entry.type),
+                                style: Theme.of(context).textTheme.labelMedium),
+                            onTap: () => context.push('/${entry.type}/${entry.slug}'),
+                          )),
+                    ],
+                  );
+                },
+              ),
             ),
     );
   }

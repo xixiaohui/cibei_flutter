@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/models/glossary_term.dart';
 import 'dictionary_controller.dart';
 
@@ -80,26 +81,29 @@ class _DictionaryListPageState extends ConsumerState<DictionaryListPage> {
               data: (data) => RefreshIndicator(
                 onRefresh: () async => ref.invalidate(
                     dictionaryListControllerProvider(_selectedLetter)),
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 8, bottom: 32),
-                  itemCount:
-                      data.terms.length + (data.isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= data.terms.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                            child:
-                                CircularProgressIndicator(strokeWidth: 2)),
-                      );
-                    }
-                    final term = data.terms[index];
-                    return _GlossaryCard(
-                        term: term,
-                        onTap: () =>
-                            context.push('/glossary/${term.slug}'));
-                  },
+                child: ContentContainer(
+                  maxWidth: Responsive.maxContentWidth,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(top: 8, bottom: 32),
+                    itemCount:
+                        data.terms.length + (data.isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= data.terms.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2)),
+                        );
+                      }
+                      final term = data.terms[index];
+                      return _GlossaryCard(
+                          term: term,
+                          onTap: () =>
+                              context.push('/glossary/${term.slug}'));
+                    },
+                  ),
                 ),
               ),
             ),

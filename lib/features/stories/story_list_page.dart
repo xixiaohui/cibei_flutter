@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/components/story_card.dart';
 import 'story_controller.dart';
 
@@ -79,25 +80,28 @@ class _StoryListPageState extends ConsumerState<StoryListPage> {
               data: (data) => RefreshIndicator(
                 onRefresh: () async => ref.invalidate(
                     storyListControllerProvider(_selectedCategory)),
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 8, bottom: 32),
-                  itemCount:
-                      data.stories.length + (data.isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= data.stories.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                            child:
-                                CircularProgressIndicator(strokeWidth: 2)),
-                      );
-                    }
-                    final story = data.stories[index];
-                    return StoryCard(
-                        story: story,
-                        onTap: () => context.push('/story/${story.slug}'));
-                  },
+                child: ContentContainer(
+                  maxWidth: Responsive.maxContentWidth,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(top: 8, bottom: 32),
+                    itemCount:
+                        data.stories.length + (data.isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= data.stories.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2)),
+                        );
+                      }
+                      final story = data.stories[index];
+                      return StoryCard(
+                          story: story,
+                          onTap: () => context.push('/story/${story.slug}'));
+                    },
+                  ),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../shared/components/sutra_card.dart';
 import 'sutra_controller.dart';
 
@@ -79,24 +80,28 @@ class _SutraListPageState extends ConsumerState<SutraListPage> {
               data: (data) => RefreshIndicator(
                 onRefresh: () async => ref.invalidate(
                     sutraListControllerProvider(_selectedCategory)),
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 8, bottom: 32),
-                  itemCount:
-                      data.sutras.length + (data.isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= data.sutras.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child:
-                            Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                      );
-                    }
-                    final sutra = data.sutras[index];
-                    return SutraCard(
-                        sutra: sutra,
-                        onTap: () => context.push('/sutra/${sutra.slug}'));
-                  },
+                child: ContentContainer(
+                  maxWidth: Responsive.maxContentWidth,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(top: 8, bottom: 32),
+                    itemCount:
+                        data.sutras.length + (data.isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= data.sutras.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2)),
+                        );
+                      }
+                      final sutra = data.sutras[index];
+                      return SutraCard(
+                          sutra: sutra,
+                          onTap: () => context.push('/sutra/${sutra.slug}'));
+                    },
+                  ),
                 ),
               ),
             ),

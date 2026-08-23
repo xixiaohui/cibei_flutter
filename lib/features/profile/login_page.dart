@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/widgets/responsive.dart';
 import 'auth_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -45,7 +46,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_isLogin ? '登录' : '注册')),
-      body: ListView(
+      body: ContentContainer(
+        maxWidth: Responsive.maxContentWidth,
+        child: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           const SizedBox(height: 40),
@@ -94,6 +97,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             child: Text(_isLogin ? '没有账号？点击注册' : '已有账号？点击登录'),
           ),
         ],
+        ),
       ),
     );
   }

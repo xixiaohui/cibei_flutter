@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../shared/models/story.dart';
+import '../../core/widgets/responsive.dart';
 
 class StoryCard extends StatelessWidget {
   final Story story;
@@ -9,6 +10,8 @@ class StoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // iPad 等大屏上图片更高,内容更舒展
+    final imageHeight = Responsive.isTablet(context) ? 220.0 : 160.0;
     return Semantics(
       label: '故事: ${story.title}',
       button: true,
@@ -23,15 +26,15 @@ class StoryCard extends StatelessWidget {
               if (story.imageUrl != null)
                 CachedNetworkImage(
                   imageUrl: story.imageUrl!,
-                  height: 160,
+                  height: imageHeight,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  placeholder: (_, __) => const SizedBox(
-                      height: 160,
+                  placeholder: (_, __) => SizedBox(
+                      height: imageHeight,
                       child:
                           Center(child: CircularProgressIndicator(strokeWidth: 2))),
-                  errorWidget: (_, __, ___) => const SizedBox(
-                      height: 160,
+                  errorWidget: (_, __, ___) => SizedBox(
+                      height: imageHeight,
                       child: Center(child: Icon(Icons.image_outlined))),
                 ),
               Padding(

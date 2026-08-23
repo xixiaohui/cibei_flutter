@@ -5,7 +5,8 @@ import '../../shared/models/glossary_term.dart';
 import 'dictionary_repository.dart';
 
 final dictionaryRepositoryProvider = Provider<DictionaryRepository>(
-    (ref) => DictionaryRepository(ref.watch(apiClientProvider), CacheManager()));
+    (ref) => DictionaryRepository(
+        ref.watch(apiClientProvider), ref.watch(cacheManagerProvider)));
 
 // Dictionary list controller
 final dictionaryListControllerProvider = AsyncNotifierProvider.family<

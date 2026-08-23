@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../core/theme/theme_provider.dart';
 import '../history/reading_history_page.dart';
 import 'sutra_controller.dart';
@@ -50,7 +51,9 @@ class SutraReadingPage extends ConsumerWidget {
             child: Container(
               color: bgColor,
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * width,
+                // iPad 等大屏限制最大阅读列宽,避免行过长影响阅读
+                width: (MediaQuery.of(context).size.width * width)
+                    .clamp(0, Responsive.maxReadingWidth),
                 child: Markdown(
                   data: c.content,
                   styleSheet: _buildMarkdownStyle(

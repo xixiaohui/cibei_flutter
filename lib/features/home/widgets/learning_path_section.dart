@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/models/learning_path.dart';
+import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/section_header.dart';
 
 class LearningPathSection extends StatelessWidget {
@@ -10,12 +11,16 @@ class LearningPathSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (paths.isEmpty) return const SizedBox.shrink();
+    // iPad 上卡片更宽,充分利用空间
+    final isTablet = Responsive.isTablet(context);
+    final cardWidth = isTablet ? 260.0 : 200.0;
+    final cardHeight = isTablet ? 180.0 : 160.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(title: '学习路线', action: '查看全部'),
         SizedBox(
-          height: 160,
+          height: cardHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -26,7 +31,7 @@ class LearningPathSection extends StatelessWidget {
               return GestureDetector(
                 onTap: () => context.push('/paths/${path.slug}'),
                 child: Container(
-                  width: 200,
+                  width: cardWidth,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,

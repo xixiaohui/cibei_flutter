@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/widgets/responsive.dart';
 import '../favorites/favorites_controller.dart';
 import '../history/reading_history_repository.dart';
 import '../history/reading_history_page.dart';
@@ -29,7 +30,9 @@ class LearningStatsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('学习统计')),
-      body: ListView(
+      body: ContentContainer(
+        maxWidth: Responsive.maxContentWidth,
+        child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Summary cards row
@@ -121,6 +124,7 @@ class LearningStatsPage extends ConsumerWidget {
                 )),
           ],
         ],
+        ),
       ),
     );
   }

@@ -25,6 +25,7 @@ import '../../features/timeline/timeline_page.dart';
 import '../../features/poster/poster_preview_page.dart';
 import '../../features/history/reading_history_page.dart';
 import '../../features/profile/learning_stats_page.dart';
+import '../../features/ai/ai_chat_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -126,6 +127,11 @@ final appRouter = GoRouter(
       path: '/search',
       name: RouteNames.search,
       builder: (context, state) => const SearchPage(),
+    ),
+    GoRoute(
+      path: '/ai',
+      name: RouteNames.ai,
+      builder: (context, state) => const AiChatPage(),
     ),
     GoRoute(
       path: '/poster/:type/:slug',

@@ -1,7 +1,7 @@
 name: cibei_space
 description: Cibei Space Mobile - Modern Buddhist Learning App
 publish_to: 'none'
-version: 2026.08.01+1784342117
+version: 2026.08.23+1784342117
 
 environment:
   sdk: '>=3.2.0 <4.0.0'

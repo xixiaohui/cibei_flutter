@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/error_display.dart';
 import '../../core/widgets/loading_indicator.dart';
+import '../../core/widgets/responsive.dart';
 import 'path_controller.dart';
 
 class PathDetailPage extends ConsumerWidget {
@@ -16,7 +17,9 @@ class PathDetailPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('学习路线')),
       body: state.when(
-        data: (data) => ListView(
+        data: (data) => ContentContainer(
+          maxWidth: Responsive.maxReadingWidth,
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             Card(
@@ -159,6 +162,7 @@ class PathDetailPage extends ConsumerWidget {
               );
             }),
           ],
+        ),
         ),
         loading: () => const LoadingIndicator(),
         error: (error, stack) => ErrorDisplay(

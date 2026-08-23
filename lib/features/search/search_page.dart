@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/widgets/responsive.dart';
 import 'search_controller.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -43,39 +44,42 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       ),
       body: _query.isEmpty
           ? recent.when(
-              data: (items) => ListView(
-                children: [
-                  if (items.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('最近搜索',
-                              style: Theme.of(context).textTheme.labelMedium),
-                          TextButton(
-                            onPressed: () => ref
-                                .read(searchRepositoryProvider)
-                                .clearRecentSearches()
-                                .then((_) =>
-                                    ref.invalidate(recentSearchesProvider)),
-                            child: const Text('清除'),
-                          ),
-                        ],
+              data: (items) => ContentContainer(
+                maxWidth: Responsive.maxContentWidth,
+                child: ListView(
+                  children: [
+                    if (items.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('最近搜索',
+                                style: Theme.of(context).textTheme.labelMedium),
+                            TextButton(
+                              onPressed: () => ref
+                                  .read(searchRepositoryProvider)
+                                  .clearRecentSearches()
+                                  .then((_) =>
+                                      ref.invalidate(recentSearchesProvider)),
+                              child: const Text('清除'),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    ...items.map(
-                      (q) => ListTile(
-                        leading: const Icon(Icons.history),
-                        title: Text(q),
-                        onTap: () {
-                          _controller.text = q;
-                          setState(() => _query = q);
-                        },
+                      ...items.map(
+                        (q) => ListTile(
+                          leading: const Icon(Icons.history),
+                          title: Text(q),
+                          onTap: () {
+                            _controller.text = q;
+                            setState(() => _query = q);
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                   ],
-                ],
+                ),
               ),
               loading: () =>
                   const Center(child: CircularProgressIndicator(strokeWidth: 2)),
@@ -87,20 +91,27 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 error: (e, _) => Center(child: Text(e.toString())),
                 data: (resp) => resp.results.isEmpty
                     ? const Center(child: Text('未找到相关结果'))
-                    : ListView.builder(
-                        itemCount: resp.results.length,
-                        itemBuilder: (context, index) {
-                          final r = resp.results[index];
-                          return ListTile(
-                            leading: Icon(_typeIcon(r.type)),
-                            title: Text(r.title),
-                            subtitle: Text(r.excerpt,
-                                maxLines: 2, overflow: TextOverflow.ellipsis),
-                            trailing: Text(r.type,
-                                style: Theme.of(context).textTheme.labelMedium),
-                            onTap: () => context.push('/${r.type}/${r.slug}'),
-                          );
-                        },
+                    : ContentContainer(
+                        maxWidth: Responsive.maxContentWidth,
+                        child: ListView.builder(
+                          itemCount: resp.results.length,
+                          itemBuilder: (context, index) {
+                            final r = resp.results[index];
+                            return ListTile(
+                              leading: Icon(_typeIcon(r.type)),
+                              title: Text(r.title),
+                              subtitle: Text(r.excerpt,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis),
+                              trailing: Text(r.type,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium),
+                              onTap: () =>
+                                  context.push('/${r.type}/${r.slug}'),
+                            );
+                          },
+                        ),
                       ),
               ) ??
               const SizedBox.shrink(),

@@ -5,7 +5,8 @@ import '../../shared/models/timeline_event.dart';
 import 'timeline_repository.dart';
 
 final timelineRepositoryProvider =
-    Provider((ref) => TimelineRepository(ref.watch(apiClientProvider), CacheManager()));
+    Provider((ref) => TimelineRepository(
+        ref.watch(apiClientProvider), ref.watch(cacheManagerProvider)));
 
 // Timeline list controller
 final timelineListControllerProvider = AsyncNotifierProvider.family<

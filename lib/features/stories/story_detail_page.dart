@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/widgets/loading_indicator.dart';
 import '../../core/widgets/error_display.dart';
+import '../../core/widgets/responsive.dart';
 import '../../core/theme/theme_provider.dart' show isNightModeProvider;
-import '../../shared/models/app_exception.dart';
 import '../../shared/widgets/share_poster_button.dart';
 import '../favorites/favorites_controller.dart';
 import '../history/reading_history_page.dart';
@@ -70,7 +70,9 @@ class StoryDetailPage extends ConsumerWidget {
             ),
           ],
         ),
-        body: ListView(
+        body: ContentContainer(
+          maxWidth: Responsive.maxReadingWidth,
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             // Image
@@ -81,13 +83,13 @@ class StoryDetailPage extends ConsumerWidget {
                   imageUrl: s.imageUrl!,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  placeholder: (_, __) => const SizedBox(
-                      height: 200,
+                  placeholder: (_, __) => SizedBox(
+                      height: Responsive.isTablet(context) ? 260 : 200,
                       child: Center(
                           child:
                               CircularProgressIndicator(strokeWidth: 2))),
-                  errorWidget: (_, __, ___) => const SizedBox(
-                      height: 200,
+                  errorWidget: (_, __, ___) => SizedBox(
+                      height: Responsive.isTablet(context) ? 260 : 200,
                       child: Center(child: Icon(Icons.image_outlined))),
                 ),
               ),
@@ -172,6 +174,7 @@ class StoryDetailPage extends ConsumerWidget {
               ),
             ],
           ],
+        ),
         ),
       ),
     );

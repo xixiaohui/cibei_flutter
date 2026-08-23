@@ -1,6 +1,7 @@
 // lib/features/ai/ai_chat_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/widgets/responsive.dart';
 import 'ai_controller.dart';
 import 'widgets/ai_message_bubble.dart';
 import 'widgets/ai_disclaimer.dart';
@@ -48,16 +49,22 @@ class _AiChatPageState extends ConsumerState<AiChatPage> {
               error: (e, _) => Center(child: Text(e.toString())),
               data: (msgs) => msgs.isEmpty
                   ? const Center(child: Text('向AI学习助手提问佛学问题'))
-                  : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: msgs.length,
-                      itemBuilder: (_, i) =>
-                          AiMessageBubble(message: msgs[i]),
+                  : ContentContainer(
+                      maxWidth: Responsive.maxContentWidth,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16),
+                        itemCount: msgs.length,
+                        itemBuilder: (_, i) =>
+                            AiMessageBubble(message: msgs[i]),
+                      ),
                     ),
             ),
           ),
-          _ChatInput(controller: _textController, onSend: _send),
+          ContentContainer(
+            maxWidth: Responsive.maxContentWidth,
+            child: _ChatInput(controller: _textController, onSend: _send),
+          ),
         ],
       ),
     );

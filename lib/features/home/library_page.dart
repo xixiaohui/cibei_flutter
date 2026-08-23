@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/widgets/responsive.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({super.key});
@@ -8,9 +9,11 @@ class LibraryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('文库')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
+      body: ContentContainer(
+        maxWidth: Responsive.maxContentWidth,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
           _LibraryCard(
             icon: Icons.menu_book,
             title: '经典文库',
@@ -45,7 +48,15 @@ class LibraryPage extends StatelessWidget {
             subtitle: '系统化学习佛学知识',
             onTap: () => context.push('/paths'),
           ),
+          const SizedBox(height: 12),
+          _LibraryCard(
+            icon: Icons.smart_toy_outlined,
+            title: 'AI 学习助手',
+            subtitle: '向 AI 提问佛学问题',
+            onTap: () => context.push('/ai'),
+          ),
         ],
+        ),
       ),
     );
   }

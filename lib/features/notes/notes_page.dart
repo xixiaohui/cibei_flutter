@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/widgets/loading_indicator.dart';
+import '../../core/widgets/responsive.dart';
 import 'notes_controller.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
@@ -67,69 +68,73 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                     ),
                   );
                 }
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: filteredNotes.length,
-                  itemBuilder: (context, index) {
-                    final note = filteredNotes[index];
-                    final snippet = note.content.length > 80
-                        ? '${note.content.substring(0, 80)}...'
-                        : note.content;
-                    final dateStr =
-                        '${note.updatedAt.year}-${note.updatedAt.month.toString().padLeft(2, '0')}-${note.updatedAt.day.toString().padLeft(2, '0')}';
+                return ContentContainer(
+                  maxWidth: Responsive.maxContentWidth,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    itemCount: filteredNotes.length,
+                    itemBuilder: (context, index) {
+                      final note = filteredNotes[index];
+                      final snippet = note.content.length > 80
+                          ? '${note.content.substring(0, 80)}...'
+                          : note.content;
+                      final dateStr =
+                          '${note.updatedAt.year}-${note.updatedAt.month.toString().padLeft(2, '0')}-${note.updatedAt.day.toString().padLeft(2, '0')}';
 
-                    return Dismissible(
-                      key: Key(note.id),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        color: Theme.of(context).colorScheme.error,
-                        child:
-                            const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      confirmDismiss: (_) async {
-                        try {
-                          await ref
-                              .read(notesProvider.notifier)
-                              .delete(note.id);
-                          return true;
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('删除失败：$e')),
-                            );
-                          }
-                          return false;
-                        }
-                      },
-                      child: ListTile(
-                        leading: _SourceIcon(sourceType: note.sourceType),
-                        title: Text(note.title,
-                            maxLines: 1, overflow: TextOverflow.ellipsis),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (snippet.isNotEmpty)
-                              Text(snippet,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis),
-                            const SizedBox(height: 4),
-                            Text(dateStr,
-                                style: Theme.of(context).textTheme.bodySmall),
-                          ],
+                      return Dismissible(
+                        key: Key(note.id),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          color: Theme.of(context).colorScheme.error,
+                          child:
+                              const Icon(Icons.delete, color: Colors.white),
                         ),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () => context.push('/note/${note.id}'),
-                      ),
-                    );
+                        confirmDismiss: (_) async {
+                          try {
+                            await ref
+                                .read(notesProvider.notifier)
+                                .delete(note.id);
+                            return true;
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('删除失败：$e')),
+                              );
+                            }
+                            return false;
+                          }
+                        },
+                        child: ListTile(
+                          leading: _SourceIcon(sourceType: note.sourceType),
+                          title: Text(note.title,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (snippet.isNotEmpty)
+                                Text(snippet,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis),
+                              const SizedBox(height: 4),
+                              Text(dateStr,
+                                  style:
+                                      Theme.of(context).textTheme.bodySmall),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () => context.push('/note/${note.id}'),
+                        ),
+                      );
+                    },
+                  ),
+                  );
                   },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+                  ),
+                  ),
+                  ],
+                  ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/note/new'),
         child: const Icon(Icons.add),

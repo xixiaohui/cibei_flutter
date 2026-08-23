@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/theme_provider.dart';
-import '../../core/storage/cache_manager.dart';
 import '../../core/storage/hive_boxes.dart';
+import '../../core/widgets/responsive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -33,7 +33,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (mounted) {
       setState(() {
         if (totalBytes < 1024) {
-          _cacheSize = '${totalBytes} B';
+          _cacheSize = '$totalBytes B';
         } else if (totalBytes < 1024 * 1024) {
           _cacheSize = '${(totalBytes / 1024).toStringAsFixed(1)} KB';
         } else {
@@ -108,7 +108,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('设置')),
-      body: ListView(
+      body: ContentContainer(
+        maxWidth: Responsive.maxContentWidth,
+        child: ListView(
         children: [
           const _SectionHeader('外观'),
           Padding(
@@ -173,6 +175,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             },
           ),
         ],
+        ),
       ),
     );
   }
